@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import type { ReactElement } from "react";
 import { PageHero } from "@/components/layout/PageHero";
 import { BlogListing } from "@/components/sections/BlogListing";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Market Buzz",
   description:
-    "Short-form market commentary and movers from Aztran Global Investments.",
-};
+    "Short-form investment commentary, market movers, and trading desk observations from Aztran Global Investments.",
+  path: "/insights/market-buzz",
+});
 
 export default function MarketBuzzInsightsPage(): ReactElement {
   return (

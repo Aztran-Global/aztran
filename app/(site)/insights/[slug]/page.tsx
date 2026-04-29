@@ -6,6 +6,7 @@ import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
 import { ConvexStorageImage } from "@/components/ui/ConvexStorageImage";
 import { InsightCard } from "@/components/ui/InsightCard";
+import { createPageMetadata } from "@/lib/seo";
 import { serverFetchQuery } from "@/lib/server-convex-query";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -31,20 +32,13 @@ export async function generateMetadata({
   }
   const title = doc.seoTitle ?? doc.title;
   const description = doc.seoDescription ?? doc.summary;
-  return {
+  return createPageMetadata({
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      type: "article",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-    },
-  };
+    path: `/insights/${slug}`,
+    type: "article",
+    keywords: doc.tags,
+  });
 }
 
 export default async function InsightArticlePage({

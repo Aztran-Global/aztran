@@ -7,6 +7,7 @@ import { ContactCTABand } from "@/components/sections/ContactCTABand";
 import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { COMPANY_LEGAL_NAME } from "@/lib/brand";
+import { createPageMetadata } from "@/lib/seo";
 import {
   Award,
   Eye,
@@ -18,10 +19,11 @@ import {
   Target,
 } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: `Who we are, mission, vision, and regulatory standing of ${COMPANY_LEGAL_NAME}.`,
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "About Aztran",
+  description: `${COMPANY_LEGAL_NAME} is an SEC-licensed fund and portfolio manager in Lagos serving investors with disciplined governance and research-led execution.`,
+  path: "/about",
+});
 
 const CORE_VALUES = [
   {

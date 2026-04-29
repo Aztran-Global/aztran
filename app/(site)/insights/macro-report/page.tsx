@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import type { ReactElement } from "react";
 import { PageHero } from "@/components/layout/PageHero";
 import { InsightsListing } from "@/components/sections/InsightsListing";
+import { createPageMetadata } from "@/lib/seo";
 import { INSIGHT_CATEGORIES } from "@/lib/site-nav";
 
-export const metadata: Metadata = {
-  title: "Macro Report",
+export const metadata: Metadata = createPageMetadata({
+  title: "Macro Investment Reports",
   description:
-    "Macro research and cross-asset views from Aztran Global Investments.",
-};
+    "Macro research, rates commentary, fixed income views, and cross-asset investment perspectives from Aztran Global Investments.",
+  path: "/insights/macro-report",
+});
 
 export default function MacroReportInsightsPage(): ReactElement {
   return (

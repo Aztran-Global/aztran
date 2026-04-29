@@ -9,6 +9,7 @@ import {
   getAllServiceSlugs,
   getServiceBySlug,
 } from "@/lib/services";
+import { createPageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -25,10 +26,12 @@ export async function generateMetadata({
   if (!service) {
     return { title: "Service" };
   }
-  return {
+  return createPageMetadata({
     title: service.page.metaTitle,
     description: service.page.metaDescription,
-  };
+    path: `/services/${service.slug}`,
+    image: service.imageSrc,
+  });
 }
 
 export default async function ServiceDetailPage({

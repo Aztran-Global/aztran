@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
 import { ConvexStorageImage } from "@/components/ui/ConvexStorageImage";
 import { api } from "@/convex/_generated/api";
+import { createPageMetadata } from "@/lib/seo";
 import { serverFetchQuery } from "@/lib/server-convex-query";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -25,7 +26,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!doc) return { title: "Blog" };
   const title = doc.seoTitle ?? doc.title;
   const description = doc.seoDescription ?? doc.summary;
-  return { title, description, openGraph: { title, description, type: "article" } };
+  return createPageMetadata({
+    title,
+    description,
+    path: `/blog/${slug}`,
+    type: "article",
+  });
 }
 
 export default async function BlogArticlePage({ params }: PageProps): Promise<ReactElement> {

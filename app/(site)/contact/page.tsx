@@ -3,12 +3,14 @@ import type { ReactElement } from "react";
 import { ContactPageAside } from "@/components/contact/ContactPageAside";
 import { PageHero } from "@/components/layout/PageHero";
 import { ContactForm } from "@/components/ui/ContactForm";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact",
+export const metadata: Metadata = createPageMetadata({
+  title: "Contact Aztran",
   description:
-    "Reach Aztran Global Investments in Lekki, Lagos—institutional enquiries, partnership desk, and mandated briefings.",
-};
+    "Contact Aztran Global Investments in Lekki, Lagos for investment management, institutional mandates, brokerage, and advisory enquiries.",
+  path: "/contact",
+});
 
 export default function ContactPage(): ReactElement {
   return (

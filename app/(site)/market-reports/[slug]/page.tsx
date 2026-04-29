@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
 import { api } from "@/convex/_generated/api";
+import { createPageMetadata } from "@/lib/seo";
 import { serverFetchQuery } from "@/lib/server-convex-query";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -23,10 +24,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const doc = await serverFetchQuery(api.marketReports.getMarketReportBySlug, { slug });
   if (!doc) return { title: "Market report" };
-  return {
+  return createPageMetadata({
     title: doc.title,
     description: `${doc.displayDate} — rates, bonds, equities, and global markets.`,
-  };
+    path: `/market-reports/${slug}`,
+    type: "article",
+  });
 }
 
 function ReportTable({

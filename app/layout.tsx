@@ -4,9 +4,18 @@ import Script from "next/script";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 import { AppProviders } from "@/components/providers/AppProviders";
+import { COMPANY_LEGAL_NAME, SITE_LOGO_PATH } from "@/lib/brand";
+import {
+  CONTACT_ADDRESS_LINES,
+  CONTACT_EMAIL,
+  CONTACT_PHONE_TEL,
+  CONTACT_SOCIAL,
+} from "@/lib/contact-info";
+import { absoluteUrl, SITE_URL } from "@/lib/seo";
 import {
   SITE_DESCRIPTION,
   SITE_KEYWORDS,
+  SITE_NAME,
   SITE_TITLE,
 } from "@/lib/site-metadata";
 
@@ -26,30 +35,51 @@ const sourceSans = Source_Sans_3({
   preload: true,
 });
 
-const appUrl =
-  process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(appUrl),
-  applicationName: "Aztran Global Investments",
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: {
     default: SITE_TITLE,
-    template: "%s · Aztran Global Investments Limited",
+    template: "%s | Aztran Global Investments",
   },
   description: SITE_DESCRIPTION,
   keywords: [...SITE_KEYWORDS],
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    url: appUrl,
-    siteName: "Aztran Global Investments Limited",
-    locale: "en_US",
+    url: "/",
+    siteName: SITE_NAME,
+    locale: "en_NG",
     type: "website",
+    images: [
+      {
+        url: absoluteUrl("/images/hero-bg.jpg"),
+        alt: COMPANY_LEGAL_NAME,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
+    images: [absoluteUrl("/images/hero-bg.jpg")],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
@@ -61,6 +91,51 @@ export default function RootLayout({
   const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: SITE_URL,
+      description: SITE_DESCRIPTION,
+      inLanguage: "en-NG",
+      publisher: {
+        "@type": "Organization",
+        name: SITE_NAME,
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FinancialService",
+      name: SITE_NAME,
+      legalName: COMPANY_LEGAL_NAME,
+      url: SITE_URL,
+      logo: absoluteUrl(SITE_LOGO_PATH),
+      image: absoluteUrl("/images/hero-bg.jpg"),
+      description: SITE_DESCRIPTION,
+      email: CONTACT_EMAIL,
+      telephone: CONTACT_PHONE_TEL,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: CONTACT_ADDRESS_LINES[0],
+        addressLocality: CONTACT_ADDRESS_LINES[1],
+        addressRegion: "Lagos",
+        addressCountry: "NG",
+      },
+      areaServed: ["Nigeria", "Lagos", "Global"],
+      knowsAbout: [
+        "Asset management",
+        "Investment management",
+        "Portfolio management",
+        "Global markets",
+        "Brokerage services",
+        "Fixed income investments",
+        "Treasury bills",
+        "Capital advisory",
+      ],
+      sameAs: Object.values(CONTACT_SOCIAL),
+    },
+  ];
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -76,6 +151,10 @@ export default function RootLayout({
             strategy="afterInteractive"
           />
         ) : null}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

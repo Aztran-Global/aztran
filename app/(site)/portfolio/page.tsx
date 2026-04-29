@@ -5,12 +5,14 @@ import { PageHero } from "@/components/layout/PageHero";
 // import { PortfolioFeaturedSection } from "@/components/sections/PortfolioFeaturedSection";
 // import { PortfolioDealsGrid } from "@/components/sections/PortfolioDealsGrid";
 import { ContactCTABand } from "@/components/sections/ContactCTABand";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Investment Portfolio",
   description:
-    "Active mandates, realised investments, and pipeline opportunities across sectors.",
-};
+    "Explore Aztran Global Investments portfolio focus, active mandates, realised investments, and sector opportunities.",
+  path: "/portfolio",
+});
 
 export default function PortfolioPage(): ReactElement {
   return (

@@ -1,9 +1,8 @@
 import type { MetadataRoute } from "next";
 import { api } from "@/convex/_generated/api";
+import { absoluteUrl } from "@/lib/seo";
 import { getAllServiceSlugs } from "@/lib/services";
 import { serverFetchQuery } from "@/lib/server-convex-query";
-
-const base = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
 export const runtime = "nodejs";
 
@@ -38,28 +37,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/insights/market-buzz",
     "/contact",
   ].map((path) => ({
-    url: `${base}${path}`,
+    url: absoluteUrl(path),
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: path === "" ? 1 : 0.7,
+    images: path === "" ? [absoluteUrl("/images/hero-bg.jpg")] : undefined,
   }));
 
   const insightRoutes: MetadataRoute.Sitemap = insightSlugs.map((slug) => ({
-    url: `${base}/insights/${slug}`,
+    url: absoluteUrl(`/insights/${slug}`),
     lastModified: new Date(),
     changeFrequency: "monthly",
     priority: 0.6,
   }));
 
   const blogRoutes: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
-    url: `${base}/blog/${slug}`,
+    url: absoluteUrl(`/blog/${slug}`),
     lastModified: new Date(),
     changeFrequency: "monthly",
     priority: 0.6,
   }));
 
   const reportRoutes: MetadataRoute.Sitemap = reportSlugs.map((slug) => ({
-    url: `${base}/market-reports/${slug}`,
+    url: absoluteUrl(`/market-reports/${slug}`),
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.65,
@@ -67,7 +67,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const serviceRoutes: MetadataRoute.Sitemap = getAllServiceSlugs().map(
     (slug) => ({
-      url: `${base}/services/${slug}`,
+      url: absoluteUrl(`/services/${slug}`),
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.65,

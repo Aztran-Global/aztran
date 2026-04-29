@@ -5,13 +5,15 @@ import { ContactCTABand } from "@/components/sections/ContactCTABand";
 import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ServiceCard } from "@/components/ui/ServiceCard";
+import { createPageMetadata } from "@/lib/seo";
 import { SERVICES } from "@/lib/services";
 
-export const metadata: Metadata = {
-  title: "Services",
+export const metadata: Metadata = createPageMetadata({
+  title: "Investment Services",
   description:
-    "Asset management, global markets and brokerage, and institutional relationship coverage—with governance and transparency at the centre.",
-};
+    "Explore SEC-licensed asset management, global markets, brokerage, and advisory services for institutions, families, corporates, and sophisticated investors.",
+  path: "/services",
+});
 
 export default function ServicesPage(): ReactElement {
   return (
