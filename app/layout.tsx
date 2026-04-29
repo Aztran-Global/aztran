@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
-import Script from "next/script";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 import { AppProviders } from "@/components/providers/AppProviders";
@@ -27,7 +26,7 @@ const cormorant = Cormorant_Garamond({
   preload: true,
 });
 
-const sourceSans = Source_Sans_3({
+const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-body",
@@ -88,7 +87,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   const structuredData = [
@@ -140,17 +138,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${cormorant.variable} ${sourceSans.variable} min-h-svh flex flex-col bg-[var(--color-offwhite)] font-body text-body text-[var(--color-navy)] antialiased dark:bg-[var(--color-navy)] dark:text-[var(--color-offwhite)]`}
+        className={`${cormorant.variable} ${inter.variable} min-h-svh flex flex-col bg-[var(--color-offwhite)] font-body text-body text-[var(--color-navy)] antialiased dark:bg-[var(--color-navy)] dark:text-[var(--color-offwhite)]`}
       >
         {/* Third-party scripts must be outside client provider trees to avoid React script-in-client errors */}
         {gtmId ? <GoogleTagManager gtmId={gtmId} /> : null}
         {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
-        {recaptchaKey ? (
-          <Script
-            src={`https://www.google.com/recaptcha/api.js?render=${recaptchaKey}`}
-            strategy="afterInteractive"
-          />
-        ) : null}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

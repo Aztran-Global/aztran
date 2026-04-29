@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import type { ReactElement } from "react";
 import { ContactPageAside } from "@/components/contact/ContactPageAside";
 import { PageHero } from "@/components/layout/PageHero";
@@ -13,8 +14,16 @@ export const metadata: Metadata = createPageMetadata({
 });
 
 export default function ContactPage(): ReactElement {
+  const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+
   return (
     <>
+      {recaptchaKey ? (
+        <Script
+          src={`https://www.google.com/recaptcha/api.js?render=${recaptchaKey}`}
+          strategy="afterInteractive"
+        />
+      ) : null}
       <PageHero title="Contact Us" imageSrc="/images/hero-bg.jpg" />
       <section className="relative overflow-hidden py-section">
         <div
