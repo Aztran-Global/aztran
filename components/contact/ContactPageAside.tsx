@@ -38,7 +38,7 @@ export function ContactPageAside(): ReactElement {
           Work with Aztran
         </h2>
         <p className="mt-4 font-body text-body leading-relaxed text-[color-mix(in_srgb,var(--color-navy)_72%,transparent)] dark:text-[var(--color-silver)]">
-          Introductory calls are scheduled by the office of the Managing Director.
+          Introductory calls are scheduled by the office of the Co-Managing Partners.
           Use the form or reach us through the channels below.
         </p>
 
