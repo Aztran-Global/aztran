@@ -95,13 +95,12 @@ export const SERVICES_NAV: readonly ServiceNavItem[] = [
     description:
       "Government securities, global and local equities, ETFs, OTC, and brokerage.",
   },
-  // Advisory is paused until the company is licensed to offer this service.
-  // {
-  //   href: "/services/brokerage-services",
-  //   label: "Advisory",
-  //   description:
-  //     "Debt and equity capital markets, structured finance, and portfolio investing.",
-  // },
+  {
+    href: "/services/brokerage-services",
+    label: "Advisory",
+    description:
+      "Debt and equity capital markets, structured finance, and portfolio investing.",
+  },
 ] as const;
 
 export type InsightNavItem = {

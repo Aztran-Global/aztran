@@ -197,76 +197,75 @@ export const SERVICES: readonly ServiceOffering[] = [
       ],
     },
   },
-  // Advisory is paused until the company is licensed to offer this service.
-  // {
-  //   slug: "brokerage-services",
-  //   title: "Advisory",
-  //   summary:
-  //     "Debt and equity capital markets, structured finance, and portfolio investing for businesses and institutional clients.",
-  //   imageSrc: "/images/debt-equity.jpeg",
-  //   imageAlt: "Advisory and capital markets concept",
-  //   titleClassName:
-  //     "text-[var(--color-navy)] group-hover:text-[var(--color-cyan)] dark:text-[var(--color-offwhite)] dark:group-hover:text-[var(--color-cyan)]",
-  //   page: {
-  //     metaTitle: "Advisory",
-  //     metaDescription:
-  //       "Advisory: debt and equity capital markets, structured finance, and portfolio investing—capital raising, tailored funding structures, and disciplined portfolio strategies.",
-  //     heroEyebrow: "Service",
-  //     headline: "Advisory",
-  //     capabilitiesHeading: "What We Offer",
-  //     lead:
-  //       "Our advisory arm helps clients raise and manage capital, structure complex financing, and invest with discipline—from the right mix of debt and equity through tailored structured solutions to long-term portfolio outcomes.",
-  //     sections: [
-  //       {
-  //         title: "Debt and Equity Capital Market",
-  //         imageSrc: "/images/debt-equity.jpeg",
-  //         imageAlt: "Debt and equity capital markets",
-  //         paragraphs: [
-  //           "We support businesses in raising and managing capital through both debt and equity financing. Our approach focuses on structuring the right mix of funding to optimize growth, maintain financial stability, and align with long-term strategic goals. From sourcing investors to negotiating terms, we ensure efficient capital deployment and sustainable financial performance.",
-  //         ],
-  //       },
-  //       {
-  //         title: "Structured Finance",
-  //         imageSrc: "/images/structure.jpeg",
-  //         imageAlt: "Structured finance and tailored funding",
-  //         paragraphs: [
-  //           "Our structured finance solutions are designed to address complex financial needs through tailored instruments and strategies. We help clients optimize cash flow, manage risk, and unlock value by structuring deals such as asset-backed financing, project finance, and other customized funding arrangements that go beyond traditional financing methods.",
-  //         ],
-  //       },
-  //       {
-  //         title: "Portfolio Investing",
-  //         imageSrc: "/images/portfolio.jpeg",
-  //         imageAlt: "Portfolio investing and diversification",
-  //         paragraphs: [
-  //           "Our approach focuses on identifying and investing in high-quality, scalable opportunities particularly within the real sector.",
-  //         ],
-  //       },
-  //       {
-  //         title: "Capital Raising & Investor Sourcing",
-  //         imageSrc: "/images/debt-equity.jpeg",
-  //         imageAlt: "Capital raising and investor sourcing",
-  //         paragraphs: [
-  //           "We help clients articulate the investment case, identify aligned investors, and manage process—from early conversations through documentation and closing. The objective is efficient capital formation with terms that fit the business model and stakeholder expectations.",
-  //         ],
-  //       },
-  //       {
-  //         title: "Asset-Backed & Project Finance Structures",
-  //         imageSrc: "/images/structure.jpeg",
-  //         imageAlt: "Asset-backed and project finance",
-  //         paragraphs: [
-  //           "Where cash flows or assets can support tailored structures, we design financing that matches project life, risk allocation, and repayment profiles—coordination between legal, operational, and financial workstreams so execution stays coherent from mandate to drawdown.",
-  //         ],
-  //       },
-  //     ],
-  //     capabilities: [
-  //       "Debt and Equity Capital Market",
-  //       "Structured Finance",
-  //       "Portfolio Investing",
-  //       "Capital Raising & Investor Sourcing",
-  //       "Asset-Backed & Project Finance Structures",
-  //     ],
-  //   },
-  // },
+  {
+    slug: "brokerage-services",
+    title: "Advisory",
+    summary:
+      "Debt and equity capital markets, structured finance, and portfolio investing for businesses and institutional clients.",
+    imageSrc: "/images/debt-equity.jpeg",
+    imageAlt: "Advisory and capital markets concept",
+    titleClassName:
+      "text-[var(--color-navy)] group-hover:text-[var(--color-cyan)] dark:text-[var(--color-offwhite)] dark:group-hover:text-[var(--color-cyan)]",
+    page: {
+      metaTitle: "Advisory",
+      metaDescription:
+        "Advisory: debt and equity capital markets, structured finance, and portfolio investing—capital raising, tailored funding structures, and disciplined portfolio strategies.",
+      heroEyebrow: "Service",
+      headline: "Advisory",
+      capabilitiesHeading: "What We Offer",
+      lead:
+        "Our advisory arm helps clients raise and manage capital, structure complex financing, and invest with discipline—from the right mix of debt and equity through tailored structured solutions to long-term portfolio outcomes.",
+      sections: [
+        {
+          title: "Debt and Equity Capital Market",
+          imageSrc: "/images/debt-equity.jpeg",
+          imageAlt: "Debt and equity capital markets",
+          paragraphs: [
+            "We support businesses in raising and managing capital through both debt and equity financing. Our approach focuses on structuring the right mix of funding to optimize growth, maintain financial stability, and align with long-term strategic goals. From sourcing investors to negotiating terms, we ensure efficient capital deployment and sustainable financial performance.",
+          ],
+        },
+        {
+          title: "Structured Finance",
+          imageSrc: "/images/structure.jpeg",
+          imageAlt: "Structured finance and tailored funding",
+          paragraphs: [
+            "Our structured finance solutions are designed to address complex financial needs through tailored instruments and strategies. We help clients optimize cash flow, manage risk, and unlock value by structuring deals such as asset-backed financing, project finance, and other customized funding arrangements that go beyond traditional financing methods.",
+          ],
+        },
+        {
+          title: "Portfolio Investing",
+          imageSrc: "/images/portfolio.jpeg",
+          imageAlt: "Portfolio investing and diversification",
+          paragraphs: [
+            "Our approach focuses on identifying and investing in high-quality, scalable opportunities particularly within the real sector.",
+          ],
+        },
+        {
+          title: "Capital Raising & Investor Sourcing",
+          imageSrc: "/images/debt-equity.jpeg",
+          imageAlt: "Capital raising and investor sourcing",
+          paragraphs: [
+            "We help clients articulate the investment case, identify aligned investors, and manage process—from early conversations through documentation and closing. The objective is efficient capital formation with terms that fit the business model and stakeholder expectations.",
+          ],
+        },
+        {
+          title: "Asset-Backed & Project Finance Structures",
+          imageSrc: "/images/structure.jpeg",
+          imageAlt: "Asset-backed and project finance",
+          paragraphs: [
+            "Where cash flows or assets can support tailored structures, we design financing that matches project life, risk allocation, and repayment profiles—coordination between legal, operational, and financial workstreams so execution stays coherent from mandate to drawdown.",
+          ],
+        },
+      ],
+      capabilities: [
+        "Debt and Equity Capital Market",
+        "Structured Finance",
+        "Portfolio Investing",
+        "Capital Raising & Investor Sourcing",
+        "Asset-Backed & Project Finance Structures",
+      ],
+    },
+  },
 ] as const;
 
 export const HOME_SERVICE_PREVIEW_COUNT = 3;
