@@ -23,7 +23,7 @@ export default function ServicesPage(): ReactElement {
         <div className="mx-auto max-w-container px-4 md:px-8">
           <SectionLabel>What we offer</SectionLabel>
           <AnimatedHeading as="h2" className="mt-4 max-w-3xl font-display text-h2">
-            Three pillars, one disciplined operating model.
+            Two pillars, one disciplined operating model.
           </AnimatedHeading>
           <p className="mt-6 max-w-2xl font-body text-body leading-relaxed text-[color-mix(in_srgb,var(--color-navy)_88%,transparent)] dark:text-[var(--color-silver)]">
             Each line of business has a dedicated team, documented workflows, and clear

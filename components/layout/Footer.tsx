@@ -107,6 +107,7 @@ export function Footer(): ReactElement {
                   Global Markets &amp; Brokerage
                 </Link>
               </li>
+              {/* Advisory — hidden while services nav item is commented out.
               <li>
                 <Link
                   href="/services/brokerage-services"
@@ -115,6 +116,7 @@ export function Footer(): ReactElement {
                   Advisory
                 </Link>
               </li>
+              */}
             </ul>
           </div>
 

@@ -39,8 +39,8 @@ export const SERVICES: readonly ServiceOffering[] = [
     summary:
       "SEC Licensed fund and portfolio management—preserving capital, generating consistent returns, and building long-term wealth across diversified mandates.",
     imageSrc:
-      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=88",
-    imageAlt: "Institutional finance documents and strategy review",
+      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=1600&q=88",
+    imageAlt: "Professional reviewing institutional investment strategy",
     titleClassName:
       "text-[var(--color-navy)] group-hover:text-[color-mix(in_srgb,var(--color-navy)_45%,var(--color-cyan))] dark:text-[var(--color-offwhite)] dark:group-hover:text-[var(--color-cyan)]",
     page: {
@@ -55,7 +55,8 @@ export const SERVICES: readonly ServiceOffering[] = [
       sections: [
         {
           title: "USD Backed Investment",
-          imageSrc: "/images/debt-equity.jpeg",
+          imageSrc:
+            "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "Global fixed income and dollar-denominated mandates",
           paragraphs: [
             "Our USD backed strategies focus on high-quality sovereign and investment-grade corporate paper traded in international markets. We focus on liquidity, issuer resilience, and clarity of cash flows so clients can access dollar income and duration management without sacrificing governance.",
@@ -64,7 +65,7 @@ export const SERVICES: readonly ServiceOffering[] = [
         {
           title: "NGN Backed Investment",
           imageSrc:
-            "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=88",
+            "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "Nigerian naira fixed income and domestic allocation",
           paragraphs: [
             "Our NGN strategies focus on high-yield government securities, top-tier bank placements, commercial paper, and blue-chip risk assets within the local market.",
@@ -72,7 +73,8 @@ export const SERVICES: readonly ServiceOffering[] = [
         },
         {
           title: "Portfolio Management",
-          imageSrc: "/images/portfoliomgmt.jpeg",
+          imageSrc:
+            "https://images.unsplash.com/photo-1556761175-5973da0d4f984?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "Institutional portfolio management and reporting",
           paragraphs: [
             "This begins with a risk profile assessment that then dovetails into strategic asset allocation and evolves through tactical tilts grounded in research. We combine top-down macro analysis with bottom-up securities selection to build a well-diversified portfolio that aligns risk appetite with return objectives.",
@@ -81,7 +83,7 @@ export const SERVICES: readonly ServiceOffering[] = [
         {
           title: "Alternative Investment",
           imageSrc:
-            "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=88",
+            "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "Alternative investments and private market opportunities",
           paragraphs: [
             "Beyond the traditional asset space, we explore opportunities through a sector-agnostic approach that exposes us to the real economy, taking advantage of untapped opportunities within the real sector.",
@@ -90,7 +92,7 @@ export const SERVICES: readonly ServiceOffering[] = [
         {
           title: "Family Office",
           imageSrc:
-            "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1600&q=88",
+            "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "Family office advisory and consolidated wealth view",
           paragraphs: [
             "For families and founders, we provide a consolidated investment view across entities and generations—coordinating asset allocation, liquidity waterfalls, and governance so capital serves both near-term needs and multi-decade objectives.",
@@ -100,7 +102,7 @@ export const SERVICES: readonly ServiceOffering[] = [
         {
           title: "Goal-Based Investing",
           imageSrc:
-            "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=88",
+            "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "Goal-based investing and milestone planning",
           paragraphs: [
             "Build a dedicated fund towards a cherished goal—whether it's a child's education, homeownership, travel, or other important life milestones. Each plan is structured around a clear timeline and tailored growth strategy, ensuring your investments remain aligned with your objectives. With a disciplined, forward-looking approach, you can steadily accumulate capital and turn future plans into tangible outcomes.",
@@ -123,8 +125,8 @@ export const SERVICES: readonly ServiceOffering[] = [
     summary:
       "The Group’s multi-currency treasury: brokerage, execution across local and international securities, ALM, and large-ticket liquidity when markets move.",
     imageSrc:
-      "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=1600&q=88",
-    imageAlt: "Market data and global trading visualization",
+      "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1600&q=88",
+    imageAlt: "Institutional markets desk and collaborative trading coverage",
     titleClassName:
       "text-[var(--color-cyan)] dark:text-[var(--color-cyan)] group-hover:text-[color-mix(in_srgb,var(--color-cyan)_85%,var(--color-navy))]",
     page: {
@@ -143,7 +145,7 @@ export const SERVICES: readonly ServiceOffering[] = [
         {
           title: "Government Securities (Bond and Treasury Bills)",
           imageSrc:
-            "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1600&q=88",
+            "https://images.unsplash.com/photo-1553729459-efe6ef1f8e44?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "Government securities, bonds, and Treasury Bills",
           paragraphs: [
             "We facilitate access to Federal Government of Nigeria (FGN) bonds and Treasury Bills and other eligible government instruments where permitted—with emphasis on transparency of pricing, settlement discipline, and regulatory compliance. Bonds and Treasury Bills remain core building blocks for institutional cash and duration; our process integrates auction calendars, secondary-market liquidity, and duration management so treasuries and funds can deploy naira and hard-currency government risk with clarity.",
@@ -152,7 +154,8 @@ export const SERVICES: readonly ServiceOffering[] = [
         },
         {
           title: "Equities (Global and Local)",
-          imageSrc: "/images/home1.jpeg",
+          imageSrc:
+            "https://images.unsplash.com/photo-1556761175-5973da0d4f984?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "Global and local equity markets execution",
           paragraphs: [
             "Our equities capability spans Nigerian listed names and selective global access routes, executed with an institutional mindset: blocks where appropriate, algos where they add value, and human judgment when markets are dislocated. Research touchpoints and corporate-action calendars are shared proactively so clients are never passive recipients of risk.",
@@ -161,7 +164,8 @@ export const SERVICES: readonly ServiceOffering[] = [
         },
         {
           title: "ETFs (Derivatives and Commodities)",
-          imageSrc: "/images/structure.jpeg",
+          imageSrc:
+            "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "ETFs, derivatives, and commodities market access",
           paragraphs: [
             "Where client mandates and regulations permit, we facilitate exposure through ETFs and related exchange-traded structures that embed derivatives or commodities linkage—always preceded by suitability, risk disclosure, and a clear view of tracking error, roll yield, and collateral mechanics.",
@@ -171,7 +175,7 @@ export const SERVICES: readonly ServiceOffering[] = [
         {
           title: "OTC Market",
           imageSrc:
-            "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=1600&q=88",
+            "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "Over-the-counter trading and negotiated liquidity",
           paragraphs: [
             "The OTC channel is where size, discretion, and counterparty trust matter most. We intermediate negotiated trades and illiquid blocks subject to policy, documentation, and best-execution standards appropriate to the instrument.",
@@ -181,7 +185,7 @@ export const SERVICES: readonly ServiceOffering[] = [
         {
           title: "Brokerage Service",
           imageSrc:
-            "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=1600&q=88",
+            "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=1600&q=88",
           imageAlt: "Institutional brokerage and client coverage",
           paragraphs: [
             "Our brokerage service gives you a simple, reliable way to manage your investments. We handle your account setup, support your trades, and provide a single point of contact who understands your needs.",
@@ -197,6 +201,7 @@ export const SERVICES: readonly ServiceOffering[] = [
       ],
     },
   },
+  /* Advisory offering hidden from site nav and listings — uncomment to restore.
   {
     slug: "brokerage-services",
     title: "Advisory",
@@ -266,9 +271,10 @@ export const SERVICES: readonly ServiceOffering[] = [
       ],
     },
   },
+  */
 ] as const;
 
-export const HOME_SERVICE_PREVIEW_COUNT = 3;
+export const HOME_SERVICE_PREVIEW_COUNT = 2;
 
 export function getServiceBySlug(slug: string): ServiceOffering | undefined {
   return SERVICES.find((s) => s.slug === slug);
