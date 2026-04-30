@@ -38,9 +38,8 @@ export const SERVICES: readonly ServiceOffering[] = [
     title: "Asset Management",
     summary:
       "SEC Licensed fund and portfolio management—preserving capital, generating consistent returns, and building long-term wealth across diversified mandates.",
-    imageSrc:
-      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=88",
-    imageAlt: "Institutional finance documents and strategy review",
+    imageSrc: "/images/portfoliomgmt.jpeg",
+    imageAlt: "Institutional portfolio management and reporting",
     titleClassName:
       "text-[var(--color-navy)] group-hover:text-[color-mix(in_srgb,var(--color-navy)_45%,var(--color-cyan))] dark:text-[var(--color-offwhite)] dark:group-hover:text-[var(--color-cyan)]",
     page: {
