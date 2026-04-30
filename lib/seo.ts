@@ -7,7 +7,7 @@ import {
   SITE_TITLE,
 } from "@/lib/site-metadata";
 
-const FALLBACK_SITE_URL = "https://aztran.vercel.app";
+const FALLBACK_SITE_URL = "https://aztranlimited.com";
 const DEFAULT_SOCIAL_IMAGE = "/images/hero-bg.jpg";
 
 function trimTrailingSlash(value: string): string {
@@ -18,9 +18,29 @@ function withProtocol(value: string): string {
   return /^https?:\/\//i.test(value) ? value : `https://${value}`;
 }
 
+function isLocalhostSiteUrl(value: string): boolean {
+  try {
+    const { hostname } = new URL(withProtocol(value));
+    return (
+      hostname === "localhost" ||
+      hostname === "127.0.0.1" ||
+      hostname === "[::1]" ||
+      hostname.endsWith(".localhost")
+    );
+  } catch {
+    return false;
+  }
+}
+
 function getSiteUrl(): string {
+  const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  /** On Vercel, a leftover `NEXT_PUBLIC_APP_URL=http://localhost:3000` breaks sitemaps and robots.txt for Google. */
+  const useAppUrl =
+    Boolean(rawAppUrl) &&
+    !(process.env.VERCEL === "1" && isLocalhostSiteUrl(rawAppUrl));
+
   const configured =
-    process.env.NEXT_PUBLIC_APP_URL ??
+    (useAppUrl ? rawAppUrl : undefined) ??
     process.env.VERCEL_PROJECT_PRODUCTION_URL ??
     process.env.VERCEL_URL ??
     FALLBACK_SITE_URL;
