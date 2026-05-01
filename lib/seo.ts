@@ -7,7 +7,7 @@ import {
   SITE_TITLE,
 } from "@/lib/site-metadata";
 
-const FALLBACK_SITE_URL = "https://aztranlimited.com";
+const FALLBACK_SITE_URL = "https://www.aztranlimited.com"; // ← added www
 const DEFAULT_SOCIAL_IMAGE = "/images/hero-bg.jpg";
 
 function trimTrailingSlash(value: string): string {

@@ -5,6 +5,8 @@ import { getAllServiceSlugs } from "@/lib/services";
 import { serverFetchQuery } from "@/lib/server-convex-query";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 /** Slugs safe for `/segment/...` URLs and XML `<loc>` (no entity-escape hazards). */
 function filterIndexableSlugs(slugs: readonly string[]): string[] {
@@ -23,6 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let insightSlugs: string[] = [];
   let blogSlugs: string[] = [];
   let reportSlugs: string[] = [];
+
   try {
     insightSlugs = filterIndexableSlugs(
       await serverFetchQuery(api.insights.getAllInsightSlugs),
@@ -30,6 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   } catch {
     insightSlugs = [];
   }
+
   try {
     blogSlugs = filterIndexableSlugs(
       await serverFetchQuery(api.blogPosts.getAllBlogSlugs),
@@ -37,6 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   } catch {
     blogSlugs = [];
   }
+
   try {
     reportSlugs = filterIndexableSlugs(
       await serverFetchQuery(api.marketReports.getAllMarketReportSlugs),
@@ -45,12 +50,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     reportSlugs = [];
   }
 
-  /**
-   * Omit `images` on the homepage entry: Next.js emits Google image extensions
-   * in an element order that breaks strict sitemap XSD validation for some crawlers.
-   */
   const staticRoutes: MetadataRoute.Sitemap = [
-    "",
+    "/",
     "/about",
     "/services",
     "/portfolio",
@@ -63,7 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: absoluteUrl(path),
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
-    priority: path === "" ? 1 : 0.7,
+    priority: path === "/" ? 1 : 0.7,
   }));
 
   const serviceRoutes: MetadataRoute.Sitemap = getAllServiceSlugs().map(
