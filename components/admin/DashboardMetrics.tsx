@@ -61,7 +61,7 @@ function KpiCard({
       viewport={VIEWPORT}
       transition={{ duration: 0.45, ease: EASE_PREMIUM, delay }}
       whileHover={{ y: -4 }}
-      className="group relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-5 shadow-[0_20px_50px_-24px_rgba(0,0,0,0.8)] transition-[box-shadow,border-color] hover:border-cyan-400/35 hover:shadow-[0_24px_60px_-20px_rgba(34,211,238,0.12)]"
+          className="group relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-4 shadow-[0_20px_50px_-24px_rgba(0,0,0,0.8)] transition-[box-shadow,border-color] hover:border-cyan-400/35 hover:shadow-[0_24px_60px_-20px_rgba(34,211,238,0.12)] sm:p-5"
     >
       <div
         className="pointer-events-none absolute -right-8 -top-8 size-24 rounded-full bg-cyan-400/10 blur-2xl transition-opacity group-hover:opacity-100"
@@ -78,7 +78,7 @@ function KpiCard({
       <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
         {label}
       </p>
-      <p className="mt-1 font-mono text-3xl font-semibold tabular-nums tracking-tight text-white">
+      <p className="mt-1 font-mono text-2xl font-semibold tabular-nums tracking-tight text-white sm:text-3xl">
         {value}
       </p>
       {hint ? (
@@ -107,9 +107,9 @@ export function DashboardMetrics(): ReactElement {
 
   if (data === undefined) {
     return (
-      <div className="space-y-8 px-4 py-6 md:px-8">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, i) => (
+      <div className="space-y-6 px-3 py-4 sm:space-y-8 sm:px-4 sm:py-6 md:px-8">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3 2xl:grid-cols-6">
+          {Array.from({ length: 6 }).map((_, i) => (
             <Skeleton key={i} className="h-36 rounded-xl bg-white/5" />
           ))}
         </div>
@@ -130,8 +130,8 @@ export function DashboardMetrics(): ReactElement {
   }));
 
   return (
-    <div className="space-y-10 px-4 py-6 md:px-8">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+    <div className="space-y-8 px-3 py-4 sm:space-y-10 sm:px-4 sm:py-6 md:px-8">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3 2xl:grid-cols-6">
         <KpiCard
           label="Insights (live)"
           value={data.publishedInsights}
@@ -182,15 +182,15 @@ export function DashboardMetrics(): ReactElement {
         />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
           transition={{ duration: 0.5, ease: EASE_PREMIUM }}
-          className="rounded-xl border border-white/10 bg-white/[0.03] p-5 shadow-xl"
+          className="min-w-0 rounded-xl border border-white/10 bg-white/[0.03] p-4 shadow-xl sm:p-5"
         >
-          <div className="mb-4 flex items-center gap-2">
+          <div className="mb-3 flex flex-wrap items-center gap-2 sm:mb-4">
             <div className="rounded-md border border-white/10 bg-cyan-400/10 p-2 text-cyan-300">
               <Inbox className="size-4" />
             </div>
@@ -199,9 +199,9 @@ export function DashboardMetrics(): ReactElement {
               <p className="text-[12px] text-zinc-500">Submissions per day · last 14 days</p>
             </div>
           </div>
-          <div className="h-[220px] w-full min-w-0">
+          <div className="h-[200px] w-full min-w-0 sm:h-[220px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={contactChartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+              <AreaChart data={contactChartData} margin={{ top: 8, right: 4, left: -8, bottom: 0 }}>
                 <defs>
                   <linearGradient id="fillContacts" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#22d3ee" stopOpacity={0.35} />
@@ -231,9 +231,9 @@ export function DashboardMetrics(): ReactElement {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
           transition={{ duration: 0.5, ease: EASE_PREMIUM, delay: 0.08 }}
-          className="rounded-xl border border-white/10 bg-white/[0.03] p-5 shadow-xl"
+          className="min-w-0 rounded-xl border border-white/10 bg-white/[0.03] p-4 shadow-xl sm:p-5"
         >
-          <div className="mb-4 flex items-center gap-2">
+          <div className="mb-3 flex flex-wrap items-center gap-2 sm:mb-4">
             <div className="rounded-md border border-white/10 bg-violet-400/10 p-2 text-violet-300">
               <Newspaper className="size-4" />
             </div>
@@ -244,9 +244,9 @@ export function DashboardMetrics(): ReactElement {
               </p>
             </div>
           </div>
-          <div className="h-[220px] w-full min-w-0">
+          <div className="h-[200px] w-full min-w-0 sm:h-[220px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={postsChartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+              <AreaChart data={postsChartData} margin={{ top: 8, right: 4, left: -8, bottom: 0 }}>
                 <defs>
                   <linearGradient id="fillPosts" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#a78bfa" stopOpacity={0.35} />
@@ -272,20 +272,20 @@ export function DashboardMetrics(): ReactElement {
         </motion.div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
           transition={{ duration: 0.5, ease: EASE_PREMIUM }}
-          className="rounded-xl border border-white/10 bg-white/[0.03] p-5"
+          className="min-w-0 rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:p-5"
         >
           <h2 className="text-sm font-semibold text-white">Recent content</h2>
           <ul className="mt-4 divide-y divide-white/10">
             {data.recentContent.map((item) => (
                 <li
                   key={`${item.kind}-${item.id}`}
-                  className="flex items-center justify-between gap-3 py-3 first:pt-0"
+                  className="flex flex-col gap-2 py-3 first:pt-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
                 >
                   <div className="min-w-0">
                     <p className="truncate font-medium text-zinc-200">{item.title}</p>
@@ -310,14 +310,14 @@ export function DashboardMetrics(): ReactElement {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
           transition={{ duration: 0.5, ease: EASE_PREMIUM, delay: 0.06 }}
-          className="rounded-xl border border-white/10 bg-white/[0.03] p-5"
+          className="min-w-0 rounded-xl border border-white/10 bg-white/[0.03] p-4 sm:p-5"
         >
           <h2 className="text-sm font-semibold text-white">Recent submissions</h2>
           <ul className="mt-4 divide-y divide-white/10">
             {data.recentContacts.map((c: Doc<"contactSubmissions">) => (
               <li
                 key={c._id}
-                className="flex items-center justify-between gap-3 py-3 first:pt-0"
+                className="flex flex-col gap-1 py-3 first:pt-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
               >
                 <div className="min-w-0">
                   <p className="truncate font-medium text-zinc-200">{c.fullName}</p>

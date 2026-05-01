@@ -12,7 +12,7 @@ export default function AdminMarketReportsPage(): ReactElement {
           <AdminPrimaryLink href="/admin/market-reports/new">New report</AdminPrimaryLink>
         }
       />
-      <div className="p-8">
+      <div className="min-w-0 p-4 sm:p-6 md:p-8">
         <MarketReportsAdminTable />
       </div>
     </div>

@@ -63,8 +63,8 @@ export function StatsManager(): ReactElement {
   });
 
   return (
-    <div className="space-y-6">
-      <Button type="button" onClick={() => setOpen(true)}>
+    <div className="min-w-0 space-y-6">
+      <Button type="button" onClick={() => setOpen(true)} className="w-full sm:w-auto">
         Add New Stat
       </Button>
       <Table>

@@ -50,8 +50,8 @@ export function ContactsTable(): ReactElement {
 
   return (
     <div>
-      <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)}>
-        <TabsList>
+      <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)} className="min-w-0">
+        <TabsList className="h-auto min-h-8 w-full max-w-full flex-wrap justify-start gap-0.5 sm:w-fit sm:flex-nowrap">
           <TabsTrigger value="all">All</TabsTrigger>
           <TabsTrigger value="unread">Unread</TabsTrigger>
           <TabsTrigger value="archived">Archived</TabsTrigger>

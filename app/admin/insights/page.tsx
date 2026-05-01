@@ -10,7 +10,7 @@ export default function AdminInsightsPage(): ReactElement {
         title="Insights"
         action={<AdminPrimaryLink href="/admin/insights/new">New insight</AdminPrimaryLink>}
       />
-      <div className="p-8">
+      <div className="min-w-0 p-4 sm:p-6 md:p-8">
         <InsightsAdminTable />
       </div>
     </div>

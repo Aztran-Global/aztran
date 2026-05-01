@@ -13,7 +13,7 @@ export function AdminTopbar({
   action?: ReactNode;
 }): ReactElement {
   return (
-    <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0c1222]/85 px-4 py-4 backdrop-blur-md md:px-8">
+    <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0c1222]/85 px-3 py-3 backdrop-blur-md sm:px-4 sm:py-4 md:px-8">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-400/90">

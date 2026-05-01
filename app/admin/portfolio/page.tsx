@@ -12,7 +12,7 @@ export default function AdminPortfolioPage(): ReactElement {
           <AdminPrimaryLink href="/admin/portfolio/new">New Item</AdminPrimaryLink>
         }
       />
-      <div className="p-8">
+      <div className="min-w-0 p-4 sm:p-6 md:p-8">
         <PortfolioAdminTable />
       </div>
     </div>

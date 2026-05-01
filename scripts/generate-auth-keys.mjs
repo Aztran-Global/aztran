@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Prints issuer suggestion, PKCS8 private key, SPKI public key, and JWKS JSON
- * for Convex custom JWT + Next.js cookie signing.
+ * Prints AUTH_JWT_* values for Convex custom JWT + Next.js staff cookies.
+ * All secrets are emitted as **single lines** (PEMs use `\n` escapes for Vercel/Convex).
  *
- * Usage: node scripts/generate-auth-keys.mjs
+ * Usage: AUTH_JWT_ISSUER="https://example.com" node scripts/generate-auth-keys.mjs
  */
 import {
   exportJWK,
@@ -24,7 +24,6 @@ const { privateKey, publicKey } = await generateKeyPair("RS256", {
   extractable: true,
 });
 
-// jose returns PEM strings here (not raw bytes).
 const privPemStr = await exportPKCS8(privateKey);
 const pubPemStr = await exportSPKI(publicKey);
 
@@ -35,22 +34,20 @@ jwk.kid = STAFF_JWT_KID;
 
 const jwks = JSON.stringify({ keys: [jwk] });
 
-/** One env var line for Vercel (backslash-n); matches lib replace(/\\n/g, "\n"). */
+/** One line for env UIs; matches `lib/*.ts` `.replace(/\\n/g, "\n")`. */
 function pemToSingleLine(pem) {
   return pem.trim().replace(/\r\n/g, "\n").split("\n").join("\\n");
 }
 
-console.log("--- Set AUTH_JWT_ISSUER (same in Next.js + Convex) ---\n");
-console.log(issuer);
-console.log("\n--- JWT kid (header + JWKS; matches lib/staff-jwt.ts) ---\n");
-console.log(STAFF_JWT_KID);
-console.log("\n--- AUTH_JWT_PRIVATE_KEY (Next.js only; multiline PEM) ---\n");
-console.log(privPemStr);
-console.log("\n--- AUTH_JWT_PRIVATE_KEY (single line \\n for Vercel) ---\n");
-console.log(pemToSingleLine(privPemStr));
-console.log("\n--- AUTH_JWT_PUBLIC_KEY (multiline PEM) ---\n");
-console.log(pubPemStr);
-console.log("\n--- AUTH_JWT_PUBLIC_KEY (single line \\n for Vercel) ---\n");
-console.log(pemToSingleLine(pubPemStr));
-console.log("\n--- AUTH_JWT_JWKS (Convex; single-line JSON) ---\n");
-console.log(jwks);
+console.log("Vercel + Convex (same value):");
+console.log(`AUTH_JWT_ISSUER=${issuer}`);
+console.log("");
+console.log("Vercel only (paste each value as one line; PEMs contain literal \\n sequences):");
+console.log(`AUTH_JWT_PRIVATE_KEY=${pemToSingleLine(privPemStr)}`);
+console.log(`AUTH_JWT_PUBLIC_KEY=${pemToSingleLine(pubPemStr)}`);
+console.log("");
+console.log("Convex only (paste entire line after = as one env value):");
+console.log(`AUTH_JWT_JWKS=${jwks}`);
+console.log("");
+console.log("Reference (must match lib/staff-jwt.ts; usually do not set as env):");
+console.log(`STAFF_JWT_KID=${STAFF_JWT_KID}`);

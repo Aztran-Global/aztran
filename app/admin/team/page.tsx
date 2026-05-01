@@ -52,7 +52,7 @@ export default function AdminTeamPage(): ReactElement {
 
   if (me === undefined) {
     return (
-      <div className="p-8 text-sm text-zinc-400">
+      <div className="min-w-0 p-6 text-sm text-zinc-400 sm:p-8">
         Loading your permissions…
       </div>
     );
@@ -95,7 +95,7 @@ export default function AdminTeamPage(): ReactElement {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-10 p-6 md:p-10">
+    <div className="mx-auto min-w-0 max-w-4xl space-y-8 p-4 sm:space-y-10 sm:p-6 md:p-10">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight text-white">
           Team & invitations

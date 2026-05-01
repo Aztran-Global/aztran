@@ -51,7 +51,7 @@ export function BlogAdminTable(): ReactElement {
             <TableCell className="whitespace-nowrap font-body text-caption">
               {row.referenceDate}
             </TableCell>
-            <TableCell className="space-x-2 text-right">
+            <TableCell className="flex flex-wrap items-center justify-end gap-2 max-sm:justify-start">
               <Link
                 href={`/admin/blog/${row._id}/edit`}
                 className="inline-flex h-7 items-center rounded-[min(var(--radius-md),12px)] border border-border bg-background px-2.5 text-[0.8rem] font-medium hover:bg-muted"

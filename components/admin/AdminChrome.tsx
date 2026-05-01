@@ -44,7 +44,7 @@ export function AdminChrome({ children }: AdminChromeProps): ReactElement {
       </aside>
 
       <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
-        <div className="flex min-h-svh flex-1 flex-col md:pl-[260px]">
+        <div className="flex min-h-svh min-w-0 flex-1 flex-col md:pl-[260px]">
           <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-white/10 bg-[#0c1222]/90 px-4 py-3 backdrop-blur-md md:hidden">
             <div className="flex min-w-0 flex-1 items-center gap-2">
               <SheetTrigger className="inline-flex size-9 shrink-0 items-center justify-center rounded-md border border-white/20 bg-white/5 text-white outline-none transition-colors hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-cyan-400/60">
@@ -74,7 +74,7 @@ export function AdminChrome({ children }: AdminChromeProps): ReactElement {
             <AdminNavigation onNavigate={() => setMobileNavOpen(false)} />
           </SheetContent>
 
-          <div className="flex flex-1 flex-col">
+          <div className="flex min-w-0 flex-1 flex-col">
             <div className="flex-1">{children}</div>
             <AdminFooter />
           </div>

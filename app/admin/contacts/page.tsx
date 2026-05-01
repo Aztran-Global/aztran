@@ -6,7 +6,7 @@ export default function AdminContactsPage(): ReactElement {
   return (
     <div>
       <AdminTopbar title="Contact Submissions" />
-      <div className="p-8">
+      <div className="min-w-0 p-4 sm:p-6 md:p-8">
         <ContactsTable />
       </div>
     </div>
