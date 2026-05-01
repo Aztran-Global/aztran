@@ -34,10 +34,15 @@ function isLocalhostSiteUrl(value: string): boolean {
 
 function getSiteUrl(): string {
   const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  const hasAppUrl = Boolean(rawAppUrl);
   /** On Vercel, a leftover `NEXT_PUBLIC_APP_URL=http://localhost:3000` breaks sitemaps and robots.txt for Google. */
   const useAppUrl =
-    Boolean(rawAppUrl) &&
-    !(process.env.VERCEL === "1" && isLocalhostSiteUrl(rawAppUrl));
+    hasAppUrl &&
+    !(
+      process.env.VERCEL === "1" &&
+      rawAppUrl !== undefined &&
+      isLocalhostSiteUrl(rawAppUrl)
+    );
 
   const configured =
     (useAppUrl ? rawAppUrl : undefined) ??
