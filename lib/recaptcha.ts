@@ -8,6 +8,32 @@ declare global {
 }
 
 /**
+ * Waits for Google's script to define `window.grecaptcha` (loads `afterInteractive`).
+ */
+function waitForGrecaptcha(timeoutMs = 12_000, intervalMs = 50): Promise<void> {
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("reCAPTCHA not loaded"));
+  }
+  if (window.grecaptcha) {
+    return Promise.resolve();
+  }
+  return new Promise((resolve, reject) => {
+    const start = Date.now();
+    const id = window.setInterval(() => {
+      if (window.grecaptcha) {
+        window.clearInterval(id);
+        resolve();
+        return;
+      }
+      if (Date.now() - start > timeoutMs) {
+        window.clearInterval(id);
+        reject(new Error("reCAPTCHA not loaded"));
+      }
+    }, intervalMs);
+  });
+}
+
+/**
  * Executes Google reCAPTCHA v3 and returns a token for server-side verification.
  */
 export async function executeRecaptcha(action: string): Promise<string> {
@@ -15,16 +41,12 @@ export async function executeRecaptcha(action: string): Promise<string> {
   if (!siteKey) {
     throw new Error("Missing NEXT_PUBLIC_RECAPTCHA_SITE_KEY");
   }
+  await waitForGrecaptcha();
+  const client = window.grecaptcha;
+  if (!client) {
+    throw new Error("reCAPTCHA not loaded");
+  }
   return await new Promise<string>((resolve, reject) => {
-    if (typeof window === "undefined") {
-      reject(new Error("reCAPTCHA not loaded"));
-      return;
-    }
-    const client = window.grecaptcha;
-    if (!client) {
-      reject(new Error("reCAPTCHA not loaded"));
-      return;
-    }
     client.ready(async () => {
       try {
         const token = await client.execute(siteKey, { action });

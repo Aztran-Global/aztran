@@ -2,6 +2,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import type { Metadata } from "next";
 import type { ReactElement, ReactNode } from "react";
 import { AdminChrome } from "@/components/admin/AdminChrome";
+import { RecaptchaScript } from "@/components/providers/RecaptchaScript";
 
 const adminSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function AdminLayout({
           "var(--font-admin-ui), ui-sans-serif, system-ui, sans-serif",
       }}
     >
+      <RecaptchaScript />
       <AdminChrome>{children}</AdminChrome>
     </div>
   );
