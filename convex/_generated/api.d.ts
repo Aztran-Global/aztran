@@ -23,6 +23,8 @@ import type * as portfolio from "../portfolio.js";
 import type * as recaptchaActions from "../recaptchaActions.js";
 import type * as researchFeed from "../researchFeed.js";
 import type * as seed from "../seed.js";
+import type * as seedData_marketReportSeedData from "../seedData/marketReportSeedData.js";
+import type * as seedMarketReports from "../seedMarketReports.js";
 import type * as slugHelpers from "../slugHelpers.js";
 import type * as staff from "../staff.js";
 import type * as staffActions from "../staffActions.js";
@@ -55,6 +57,8 @@ declare const fullApi: ApiFromModules<{
   recaptchaActions: typeof recaptchaActions;
   researchFeed: typeof researchFeed;
   seed: typeof seed;
+  "seedData/marketReportSeedData": typeof seedData_marketReportSeedData;
+  seedMarketReports: typeof seedMarketReports;
   slugHelpers: typeof slugHelpers;
   staff: typeof staff;
   staffActions: typeof staffActions;

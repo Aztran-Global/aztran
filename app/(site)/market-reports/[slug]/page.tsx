@@ -3,8 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
 import { api } from "@/convex/_generated/api";
+import { formatMaxTwoDecimals } from "@/lib/formatDecimals";
 import { createPageMetadata } from "@/lib/seo";
 import { serverFetchQuery } from "@/lib/server-convex-query";
+
+const fmt = formatMaxTwoDecimals;
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -124,52 +127,52 @@ export default async function MarketReportDetailPage({
 
   const mmRows = doc.moneyMarket.rates.map((r) => [
     r.label,
-    r.today,
-    r.prev,
-    r.change,
+    fmt(r.today),
+    fmt(r.prev),
+    fmt(r.change),
   ]);
   const tbRows = doc.treasuryBills.benchmarkRates.map((r) => [
     r.maturityDate,
-    r.dtm,
-    r.discRateToday,
-    r.discRatePrev,
-    r.changeInDiscRate,
+    fmt(r.dtm),
+    fmt(r.discRateToday),
+    fmt(r.discRatePrev),
+    fmt(r.changeInDiscRate),
   ]);
   const fgnRows = doc.fgnBonds.bonds.map((r) => [
     r.maturityDate,
-    r.coupon,
-    r.ttm,
-    r.yieldToday,
-    r.yieldPrev,
-    r.changeInYield,
+    fmt(r.coupon),
+    fmt(r.ttm),
+    fmt(r.yieldToday),
+    fmt(r.yieldPrev),
+    fmt(r.changeInYield),
   ]);
   const ssaRows = doc.ssaEurobonds.bonds.map((r) => [
     r.sovereign,
     r.maturityDate,
-    r.coupon,
-    r.ttm,
-    r.yieldToday,
-    r.yieldPrev,
-    r.changeInYield,
+    fmt(r.coupon),
+    fmt(r.ttm),
+    fmt(r.yieldToday),
+    fmt(r.yieldPrev),
+    fmt(r.changeInYield),
   ]);
   const eqUp = doc.localEquities.topGainers.map((r) => [
     r.ticker,
-    r.open,
-    r.close,
-    `${r.changePercent}%`,
+    fmt(r.open),
+    fmt(r.close),
+    `${fmt(r.changePercent)}%`,
   ]);
   const eqDown = doc.localEquities.topLosers.map((r) => [
     r.ticker,
-    r.open,
-    r.close,
-    `${r.changePercent}%`,
+    fmt(r.open),
+    fmt(r.close),
+    `${fmt(r.changePercent)}%`,
   ]);
   const glRows = doc.globalMarkets.indices.map((r) => [
     r.region,
     r.index,
-    r.open,
-    r.closeOrIntraday,
-    `${r.changePercent}%`,
+    fmt(r.open),
+    fmt(r.closeOrIntraday),
+    `${fmt(r.changePercent)}%`,
     r.isIntraday ? "Yes" : "No",
   ]);
 
@@ -230,7 +233,7 @@ export default async function MarketReportDetailPage({
             <p className="mt-3 font-body text-body text-[color-mix(in_srgb,var(--color-navy)_62%,transparent)] dark:text-[var(--color-silver)]">
               Average benchmark:{" "}
               <span className="tabular-nums text-[var(--color-navy)] dark:text-[var(--color-offwhite)]">
-                {doc.treasuryBills.averageBenchmarkRate}
+                {fmt(doc.treasuryBills.averageBenchmarkRate)}
               </span>
             </p>
           ) : null}
@@ -251,7 +254,7 @@ export default async function MarketReportDetailPage({
             <p className="mt-3 font-body text-body text-[color-mix(in_srgb,var(--color-navy)_62%,transparent)] dark:text-[var(--color-silver)]">
               Avg benchmark yield:{" "}
               <span className="tabular-nums text-[var(--color-navy)] dark:text-[var(--color-offwhite)]">
-                {doc.fgnBonds.averageBenchmarkYield}
+                {fmt(doc.fgnBonds.averageBenchmarkYield)}
               </span>
             </p>
           ) : null}
@@ -306,7 +309,7 @@ export default async function MarketReportDetailPage({
                     {k}
                   </p>
                   <p className="mt-2 font-display text-h3 tabular-nums text-[var(--color-navy)] dark:text-[var(--color-offwhite)]">
-                    {String(v)}
+                    {typeof v === "number" ? fmt(v) : String(v)}
                   </p>
                 </div>
               ))}
