@@ -5,6 +5,7 @@ export const INSIGHT_CATEGORIES = {
   macroReport: "Macro Report",
   marketReport: "Market Report",
   marketBuzz: "Market Buzz",
+  interviews: "Interviews",
 } as const;
 
 /** Legacy `insights.category` values so older documents remain editable in admin. */
@@ -130,5 +131,12 @@ export const INSIGHTS_NAV: readonly InsightNavItem[] = [
     label: "Market Buzz",
     description: "Quick takes, movers, and what the desk is watching.",
     category: INSIGHT_CATEGORIES.marketBuzz,
+  },
+  {
+    href: "/insights/interviews",
+    label: "Interviews",
+    description:
+      "Managing directors in conversation at conferences, panels, and industry forums.",
+    category: INSIGHT_CATEGORIES.interviews,
   },
 ] as const;

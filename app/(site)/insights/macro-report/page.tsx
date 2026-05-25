@@ -18,7 +18,10 @@ export default function MacroReportInsightsPage(): ReactElement {
       <PageHero title="Macro Report" imageSrc="/images/hero-bg.jpg" />
       <section className="py-section">
         <div className="mx-auto max-w-container px-4 md:px-8">
-          <InsightsListing forcedCategory={INSIGHT_CATEGORIES.macroReport} />
+          <InsightsListing
+            forcedCategory={INSIGHT_CATEGORIES.macroReport}
+            syncUrl
+          />
         </div>
       </section>
     </>

@@ -1,39 +1,32 @@
 "use client";
 
-import { usePaginatedQuery } from "convex/react";
+import { usePaginatedQuery, useQuery } from "convex/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, type ReactElement } from "react";
+import type { ReactElement } from "react";
 import { api } from "@/convex/_generated/api";
-import type { Doc } from "@/convex/_generated/dataModel";
-import { MarketReportCard } from "@/components/ui/MarketReportCard";
-import { ReportMonthFilter } from "@/components/sections/ReportMonthFilter";
+import type { Doc, Id } from "@/convex/_generated/dataModel";
+import { InterviewCard } from "@/components/ui/InterviewCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { formatMonthLabel } from "@/lib/report-month";
-import { useUiStore } from "@/store/uiStore";
 
-type MarketReportsListingProps = {
-  syncUrl?: boolean;
-};
-
-export function MarketReportsListing({
-  syncUrl = true,
-}: MarketReportsListingProps): ReactElement {
-  const month = useUiStore((s) => s.marketReportMonth);
-  const setMonth = useUiStore((s) => s.setMarketReportMonth);
-  const setResearchFeedLimit = useUiStore((s) => s.setResearchFeedLimit);
-
-  const onMonthChange = useCallback(
-    (value: string) => {
-      setMonth(value);
-      setResearchFeedLimit(18);
-    },
-    [setMonth, setResearchFeedLimit],
+function InterviewCardWithCover({
+  interview,
+}: {
+  interview: Doc<"interviews">;
+}): ReactElement {
+  const coverUrl = useQuery(
+    api.storage.getFileUrl,
+    interview.coverImageId
+      ? { storageId: interview.coverImageId as Id<"_storage"> }
+      : "skip",
   );
+  return <InterviewCard interview={interview} coverUrl={coverUrl} />;
+}
 
+export function InterviewsListing(): ReactElement {
   const { results, status, loadMore } = usePaginatedQuery(
-    api.marketReports.listPublishedMarketReportsPaginated,
-    { month },
+    api.interviews.listPublishedInterviewsPaginated,
+    {},
     { initialNumItems: 9 },
   );
 
@@ -42,31 +35,30 @@ export function MarketReportsListing({
 
   return (
     <div>
-      <ReportMonthFilter
-        lane="market"
-        value={month}
-        onChange={onMonthChange}
-        syncUrl={syncUrl}
-      />
+      <p className="mb-8 max-w-2xl font-body text-body leading-relaxed text-[color-mix(in_srgb,var(--color-navy)_72%,transparent)] dark:text-[var(--color-silver)]">
+        Conversations on the ground — Aztran managing directors in dialogue with
+        markets, policymakers, and industry leaders. Watch full interviews from
+        conferences, panels, and media appearances.
+      </p>
 
       <AnimatePresence mode="popLayout">
         {loading ? (
           <div className="grid gap-6 md:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-72 rounded-sm" />
+              <Skeleton key={i} className="h-80 rounded-sm" />
             ))}
           </div>
         ) : (
           <motion.div layout className="grid gap-6 md:grid-cols-3">
-            {(results ?? []).map((report: Doc<"marketReports">) => (
+            {(results ?? []).map((interview: Doc<"interviews">) => (
               <motion.div
-                key={report._id}
+                key={interview._id}
                 layout
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
               >
-                <MarketReportCard report={report} />
+                <InterviewCardWithCover interview={interview} />
               </motion.div>
             ))}
           </motion.div>
@@ -84,10 +76,11 @@ export function MarketReportsListing({
       {empty ? (
         <div className="rounded-2xl border border-[color-mix(in_srgb,var(--color-silver)_40%,transparent)] bg-[color-mix(in_srgb,var(--color-offwhite)_80%,var(--color-white))] px-8 py-14 text-center dark:border-[color-mix(in_srgb,var(--color-silver)_22%,transparent)] dark:bg-[color-mix(in_srgb,var(--color-navy)_90%,black)]">
           <p className="font-display text-h3 text-[var(--color-navy)] dark:text-[var(--color-offwhite)]">
-            No market reports for {formatMonthLabel(month)}
+            Interviews coming soon
           </p>
           <p className="mx-auto mt-3 max-w-sm font-body text-body text-[color-mix(in_srgb,var(--color-navy)_62%,transparent)] dark:text-[var(--color-silver)]">
-            Try another month from the filter above.
+            We are preparing video conversations with our leadership team. Check
+            back shortly.
           </p>
         </div>
       ) : null}

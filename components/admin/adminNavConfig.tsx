@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Newspaper,
   LineChart,
+  Mic,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -20,6 +21,7 @@ export const ADMIN_NAV: readonly AdminNavItem[] = [
   { href: "/admin/insights", label: "Insights", icon: FileText },
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/market-reports", label: "Market reports", icon: LineChart },
+  { href: "/admin/interviews", label: "Interviews", icon: Mic },
   { href: "/admin/portfolio", label: "Portfolio", icon: Briefcase },
   { href: "/admin/stats", label: "Stats", icon: BarChart3 },
   { href: "/admin/contacts", label: "Contacts", icon: Inbox },

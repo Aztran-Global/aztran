@@ -101,6 +101,26 @@ export default defineSchema({
     .index("by_reportDate", ["reportDate"])
     .index("by_status_and_date", ["status", "reportDate"]),
 
+  interviews: defineTable({
+    title: v.string(),
+    slug: v.string(),
+    youtubeVideoId: v.string(),
+    summary: v.string(),
+    referenceDate: v.string(),
+    displayDate: v.string(),
+    status: publishStatus,
+    coverImageId: v.optional(v.id("_storage")),
+    seoTitle: v.optional(v.string()),
+    seoDescription: v.optional(v.string()),
+    publishedAt: v.optional(v.number()),
+    createdBy: v.optional(v.string()),
+    updatedBy: v.optional(v.string()),
+  })
+    .index("by_status", ["status"])
+    .index("by_slug", ["slug"])
+    .index("by_referenceDate", ["referenceDate"])
+    .index("by_status_referenceDate", ["status", "referenceDate"]),
+
   portfolio: defineTable({
     title: v.string(),
     slug: v.string(),

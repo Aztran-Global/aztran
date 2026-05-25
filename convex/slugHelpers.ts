@@ -2,9 +2,13 @@ import slugify from "slugify";
 import type { Id } from "./_generated/dataModel";
 import type { QueryCtx } from "./_generated/server";
 
-type SlugTable = "insights" | "blogPosts" | "marketReports";
+type SlugTable = "insights" | "blogPosts" | "marketReports" | "interviews";
 
-type SlugDocId = Id<"insights"> | Id<"blogPosts"> | Id<"marketReports">;
+type SlugDocId =
+  | Id<"insights">
+  | Id<"blogPosts">
+  | Id<"marketReports">
+  | Id<"interviews">;
 
 type DbCtx = { db: QueryCtx["db"] };
 

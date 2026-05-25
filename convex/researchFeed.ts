@@ -1,5 +1,6 @@
 import { query } from "./_generated/server";
 import { v } from "convex/values";
+import { monthRange } from "./reportMonth";
 
 const MACRO = "Macro Report";
 const LEGACY_MACRO_INFLATION = "Inflation";
@@ -42,14 +43,23 @@ export const getMergedResearchFeed = query({
 
 /** Structured desk reports only (matches `/insights/market-report`). */
 export const getMergedMarketLaneFeed = query({
-  args: { limit: v.number() },
-  handler: async (ctx, { limit }) => {
+  args: { limit: v.number(), month: v.optional(v.string()) },
+  handler: async (ctx, { limit, month }) => {
     const cap = Math.min(Math.max(limit, 1), 150);
-    const reps = await ctx.db
+    let q = ctx.db
       .query("marketReports")
-      .withIndex("by_status_and_date", (q) => q.eq("status", "published"))
-      .order("desc")
-      .take(cap);
+      .withIndex("by_status_and_date", (iq) => iq.eq("status", "published"))
+      .order("desc");
+    if (month) {
+      const { start, end } = monthRange(month);
+      q = q.filter((f) =>
+        f.and(
+          f.gte(f.field("reportDate"), start),
+          f.lte(f.field("reportDate"), end),
+        ),
+      );
+    }
+    const reps = await q.take(cap);
     return reps.map((doc) => ({
       kind: "marketReport" as const,
       ref: doc.reportDate,
@@ -78,20 +88,29 @@ export const getMergedBuzzLaneFeed = query({
 
 /** Macro Report lane — category string matches `INSIGHT_CATEGORIES.macroReport` in site-nav. */
 export const getMacroInsightsFeed = query({
-  args: { limit: v.number() },
-  handler: async (ctx, { limit }) => {
+  args: { limit: v.number(), month: v.optional(v.string()) },
+  handler: async (ctx, { limit, month }) => {
     const cap = Math.min(Math.max(limit, 1), 150);
-    const rows = await ctx.db
+    let q = ctx.db
       .query("insights")
-      .withIndex("by_status_referenceDate", (q) => q.eq("status", "published"))
+      .withIndex("by_status_referenceDate", (iq) => iq.eq("status", "published"))
       .order("desc")
       .filter((f) =>
         f.or(
           f.eq(f.field("category"), MACRO),
           f.eq(f.field("category"), LEGACY_MACRO_INFLATION),
         ),
-      )
-      .take(cap);
+      );
+    if (month) {
+      const { start, end } = monthRange(month);
+      q = q.filter((f) =>
+        f.and(
+          f.gte(f.field("referenceDate"), start),
+          f.lte(f.field("referenceDate"), end),
+        ),
+      );
+    }
+    const rows = await q.take(cap);
     return rows.map((doc) => ({ kind: "insight" as const, ref: doc.referenceDate, doc }));
   },
 });

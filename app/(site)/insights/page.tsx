@@ -17,7 +17,7 @@ export default function InsightsPage(): ReactElement {
       <PageHero title="Insights" imageSrc="/images/hero-bg.jpg" />
       <section className="py-section">
         <div className="mx-auto max-w-container px-4 md:px-8">
-          <InsightsListing />
+          <InsightsListing syncUrl />
         </div>
       </section>
     </>

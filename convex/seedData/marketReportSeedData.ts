@@ -26,131 +26,36 @@
  *     DAILY_MARKET_REPORT_16TH_APRIL_2026.pdf      → 2026-04-16
  *     DAILY_MARKET_REPORT_17TH_APRIL_2026.pdf      → 2026-04-17
  *     DAILY_MARKET_REPORT_31ST_MARCH_2026.pdf      → 2026-03-31
+ *     DAILY_MARKET_REPORT_20TH_APRIL_2026.pdf      → 2026-04-20
+ *     … through DAILY_MARKET_REPORT_24TH_APRIL_2026.pdf (continuation raw)
+ *     DAILY_MARKET_REPORT_4TH_MAY_2026.pdf … DAILY_MARKET_REPORT_7TH_MAY_2026.pdf (May packs)
+ *     Pack 3 extra — `seeddata3` / `marketReportSeedPack3Extra.ts`: May 8, 11, 12, 13 (mixed-case PDF names in payload)
  */
 
-// ─── Types (mirror your Convex schema) ────────────────────────────────────────
+import type { MarketReportSeedData } from "./marketReportSeedTypes";
+export type { MarketReportSeedData } from "./marketReportSeedTypes";
+import { marketReportsSeedDataContinuation } from "./marketReportSeedContinuation";
+import { marketReportsSeedDataMayContinuation } from "./marketReportSeedMayContinuation";
+import { marketReportsSeedDataNewContinuation } from "./marketReportSeedNewContinuation";
+import { marketReportsSeedDataPack3Extra } from "./marketReportSeedPack3Extra";
 
-interface MoneyMarketRate {
-    label: string;
-    today: number;
-    prev: number;
-    change: number;
-  }
+// ─── Shared disclaimer ────────────────────────────────────────────────────────
+const DISCLAIMER = `This report is intended solely for informational purposes and should not be interpreted as investment advice or a recommendation to engage in any financial transactions. Aztran Investments accepts no liability for any decisions made or losses incurred based on its use. Always seek independent professional advice before making financial decisions.\n\nThis message and any accompanying documents may contain confidential or privileged information and are intended only for the named recipient. If you are not the intended recipient, please notify the sender immediately, delete this message from your system, and refrain from disclosing, copying, or using any part of it. Electronic communications are not guaranteed to be secure or virus-free; Aztran Investments is not liable for any damage arising from unauthorized access, interception, or the presence of malware.\n\nOpinions expressed that do not relate to the official business of Aztran Investments are those of the author and do not necessarily reflect the views of the firm.`;
   
-  interface SectionNarrative {
-    body: string;
-    outlook: string;
-  }
-  
-  interface FgnBondRow {
-    maturityDate: string;
-    coupon: number;
-    ttm: number;
-    yieldToday: number;
-    yieldPrev: number;
-    changeInYield: number;
-  }
-  
-  interface TbillRow {
-    maturityDate: string;
-    dtm: number;
-    discRateToday: number;
-    discRatePrev: number;
-    changeInDiscRate: number;
-  }
-  
-  interface EurobondRow {
-    sovereign: string;
-    maturityDate: string;
-    coupon: number;
-    ttm: number;
-    yieldToday: number;
-    yieldPrev: number;
-    changeInYield: number;
-  }
-  
-  interface EquityTickerRow {
-    ticker: string;
-    open: number;
-    close: number;
-    changePercent: number;
-  }
-  
-  interface GlobalIndexRow {
-    region: string;
-    index: string;
-    open: number;
-    closeOrIntraday: number;
-    changePercent: number;
-    isIntraday?: boolean;
-  }
-  
-  export interface MarketReportSeedData {
-    title: string;
-    reportDate: string;
-    displayDate: string;
-    status: "draft" | "published" | "archived";
-    pdfFileName: string;
-    sources: string;
-    disclaimer: string;
-    moneyMarket: {
-      systemLiquiditySummary?: string;
-      rates: MoneyMarketRate[];
-      narrative: SectionNarrative;
-    };
-    treasuryBills: {
-      averageBenchmarkRate?: number;
-      benchmarkRates: TbillRow[];
-      narrative: SectionNarrative;
-    };
-    fgnBonds: {
-      averageBenchmarkYield?: number;
-      bonds: FgnBondRow[];
-      narrative: SectionNarrative;
-    };
-    ssaEurobonds: {
-      bonds: EurobondRow[];
-      narrative: SectionNarrative;
-    };
-    localEquities: {
-      asiLevel?: number;
-      asiChangePercent?: number;
-      ytdReturn?: number;
-      marketCap?: string;
-      turnoverValue?: string;
-      volumeTraded?: string;
-      marketBreadthRatio?: number;
-      gainers?: number;
-      losers?: number;
-      topGainers: EquityTickerRow[];
-      topLosers: EquityTickerRow[];
-      narrative: SectionNarrative;
-    };
-    globalMarkets: {
-      isIntradayNote?: boolean;
-      indices: GlobalIndexRow[];
-      narrative: SectionNarrative;
-    };
-  }
-  
-  // ─── Shared disclaimer ────────────────────────────────────────────────────────
-  
-  const DISCLAIMER = `This report is intended solely for informational purposes and should not be interpreted as investment advice or a recommendation to engage in any financial transactions. Aztran Investments accepts no liability for any decisions made or losses incurred based on its use. Always seek independent professional advice before making financial decisions.\n\nThis message and any accompanying documents may contain confidential or privileged information and are intended only for the named recipient. If you are not the intended recipient, please notify the sender immediately, delete this message from your system, and refrain from disclosing, copying, or using any part of it. Electronic communications are not guaranteed to be secure or virus-free; Aztran Investments is not liable for any damage arising from unauthorized access, interception, or the presence of malware.\n\nOpinions expressed that do not relate to the official business of Aztran Investments are those of the author and do not necessarily reflect the views of the firm.`;
-  
-  const SOURCES = "NGX, FMDQ, CBN, Investing.com, Aztran Research";
-  const TITLE = "Daily Financial Markets Update";
-  
-  // ─── SSA Eurobond sovereign names ─────────────────────────────────────────────
-  
-  const NGA = "Republic Of Nigeria";
-  const ANG = "Republic Of Angola";
-  const EGY = "Arab Republic Of Egypt";
-  
-  // ─────────────────────────────────────────────────────────────────────────────
-  // REPORT DATA
-  // ─────────────────────────────────────────────────────────────────────────────
-  
-  export const marketReportsSeedData: MarketReportSeedData[] = [
+const SOURCES = "NGX, FMDQ, CBN, Investing.com, Aztran Research";
+const TITLE = "Daily Financial Markets Update";
+
+// ─── SSA Eurobond sovereign names ─────────────────────────────────────────────
+
+const NGA = "Republic Of Nigeria";
+const ANG = "Republic Of Angola";
+const EGY = "Arab Republic Of Egypt";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// REPORT DATA
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const marketReportsSeedData: MarketReportSeedData[] = [
   
     // ── 31 March 2026 ──────────────────────────────────────────────────────────
     {
@@ -1494,4 +1399,9 @@ interface MoneyMarketRate {
         },
       },
     },
+
+    ...marketReportsSeedDataContinuation,
+    ...marketReportsSeedDataMayContinuation,
+    ...marketReportsSeedDataNewContinuation,
+    ...marketReportsSeedDataPack3Extra,
   ];

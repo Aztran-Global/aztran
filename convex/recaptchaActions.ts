@@ -6,6 +6,7 @@ import { v } from "convex/values";
 type RecaptchaVerify = {
   success: boolean;
   score?: number;
+  "error-codes"?: string[];
 };
 
 /**
@@ -33,8 +34,14 @@ export const assertValidToken = action({
     );
 
     const verified = (await verifyRes.json()) as RecaptchaVerify;
-    if (!verified.success || (verified.score ?? 0) < 0.5) {
-      throw new Error("reCAPTCHA verification failed");
+    if (!verified.success) {
+      const codes = verified["error-codes"]?.join(", ") ?? "unknown";
+      throw new Error(`reCAPTCHA verification failed (success=false; error-codes: ${codes})`);
+    }
+    if ((verified.score ?? 0) < 0.5) {
+      throw new Error(
+        `reCAPTCHA score too low (${String(verified.score)}; minimum 0.5). Try again or check domain / key pairing.`,
+      );
     }
 
     return { score: verified.score ?? 0 };

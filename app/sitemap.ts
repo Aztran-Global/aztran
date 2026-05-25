@@ -25,6 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let insightSlugs: string[] = [];
   let blogSlugs: string[] = [];
   let reportSlugs: string[] = [];
+  let interviewSlugs: string[] = [];
 
   try {
     insightSlugs = filterIndexableSlugs(
@@ -50,6 +51,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     reportSlugs = [];
   }
 
+  try {
+    interviewSlugs = filterIndexableSlugs(
+      await serverFetchQuery(api.interviews.getAllInterviewSlugs),
+    );
+  } catch {
+    interviewSlugs = [];
+  }
+
   const staticRoutes: MetadataRoute.Sitemap = [
     "/",
     "/about",
@@ -59,6 +68,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/insights/macro-report",
     "/insights/market-report",
     "/insights/market-buzz",
+    "/insights/interviews",
     "/contact",
   ].map((path) => ({
     url: absoluteUrl(path),
@@ -97,11 +107,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.65,
   }));
 
+  const interviewRoutes: MetadataRoute.Sitemap = interviewSlugs.map((slug) => ({
+    url: absoluteUrl(`/insights/interviews/${slug}`),
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
   return [
     ...staticRoutes,
     ...serviceRoutes,
     ...insightRoutes,
     ...blogRoutes,
     ...reportRoutes,
+    ...interviewRoutes,
   ];
 }

@@ -58,6 +58,52 @@ export const seedMarketReports = internalMutation({
 });
 
 /**
+ * Insert one report from `marketReportsSeedData` if that `reportDate` is missing.
+ * Run: `npx convex run seedMarketReports:seedMarketReportByReportDate '{"reportDate":"2026-05-08"}'`
+ */
+export const seedMarketReportByReportDate = internalMutation({
+  args: { reportDate: v.string() },
+  handler: async (ctx, { reportDate }) => {
+    const existing = await ctx.db
+      .query("marketReports")
+      .withIndex("by_reportDate", (q) => q.eq("reportDate", reportDate))
+      .first();
+    if (existing) {
+      return { inserted: false as const, id: existing._id };
+    }
+
+    const row = marketReportsSeedData.find((r) => r.reportDate === reportDate);
+    if (!row) throw new Error(`No seed row for reportDate=${reportDate}`);
+
+    const baseSlug = `daily-financial-markets-update-${row.reportDate}`;
+    const slug = await ensureUniqueSlug(ctx, "marketReports", baseSlug);
+    const publishedAt =
+      row.status === "published"
+        ? new Date(`${row.reportDate}T12:00:00.000Z`).getTime()
+        : undefined;
+
+    const id = await ctx.db.insert("marketReports", {
+      slug,
+      title: row.title,
+      reportDate: row.reportDate,
+      displayDate: row.displayDate,
+      status: row.status,
+      publishedAt,
+      pdfFileName: row.pdfFileName,
+      moneyMarket: row.moneyMarket,
+      treasuryBills: row.treasuryBills,
+      fgnBonds: row.fgnBonds,
+      ssaEurobonds: row.ssaEurobonds,
+      localEquities: row.localEquities,
+      globalMarkets: row.globalMarkets,
+      sources: row.sources,
+      disclaimer: row.disclaimer,
+    });
+    return { inserted: true as const, id };
+  },
+});
+
+/**
  * After uploading a PDF to Convex file storage, link it to the report for this date.
  * Run: `npx convex run seedMarketReports:attachMarketReportPdfByReportDate`
  */

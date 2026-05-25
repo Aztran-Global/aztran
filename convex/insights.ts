@@ -4,6 +4,7 @@ import { v } from "convex/values";
 import { requireUser } from "./auth";
 import type { Id } from "./_generated/dataModel";
 import { insightMetric, insightSection, publishStatus } from "./contentValidators";
+import { distinctMonthKeysFromIsoDates, monthRange } from "./reportMonth";
 import { ensureUniqueSlug, slugFromTitle } from "./slugHelpers";
 
 async function deleteInsightAssets(
@@ -69,12 +70,32 @@ const insightPatchArgs = v.object({
 const MACRO_REPORT_CATEGORY = "Macro Report";
 const LEGACY_MACRO_INFLATION_CATEGORY = "Inflation";
 
+export const listPublishedMacroMonths = query({
+  args: {},
+  handler: async (ctx) => {
+    const rows = await ctx.db
+      .query("insights")
+      .withIndex("by_status_referenceDate", (q) => q.eq("status", "published"))
+      .order("desc")
+      .take(1000);
+    const macroDates = rows
+      .filter(
+        (r) =>
+          r.category === MACRO_REPORT_CATEGORY ||
+          r.category === LEGACY_MACRO_INFLATION_CATEGORY,
+      )
+      .map((r) => r.referenceDate);
+    return distinctMonthKeysFromIsoDates(macroDates);
+  },
+});
+
 export const listPublishedInsightsPaginated = query({
   args: {
     paginationOpts: paginationOptsValidator,
     category: v.optional(v.string()),
+    month: v.optional(v.string()),
   },
-  handler: async (ctx, { paginationOpts, category }) => {
+  handler: async (ctx, { paginationOpts, category, month }) => {
     let q = ctx.db
       .query("insights")
       .withIndex("by_status_referenceDate", (iq) => iq.eq("status", "published"))
@@ -90,6 +111,15 @@ export const listPublishedInsightsPaginated = query({
       } else {
         q = q.filter((f) => f.eq(f.field("category"), category));
       }
+    }
+    if (month) {
+      const { start, end } = monthRange(month);
+      q = q.filter((f) =>
+        f.and(
+          f.gte(f.field("referenceDate"), start),
+          f.lte(f.field("referenceDate"), end),
+        ),
+      );
     }
     return await q.paginate(paginationOpts);
   },

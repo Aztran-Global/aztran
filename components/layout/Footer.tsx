@@ -68,6 +68,7 @@ export function Footer(): ReactElement {
                 { href: "/insights/macro-report", label: "Macro Report" },
                 { href: "/insights/market-report", label: "Market Report" },
                 { href: "/insights/market-buzz", label: "Market Buzz" },
+                { href: "/insights/interviews", label: "Interviews" },
                 { href: "/contact", label: "Contact" },
               ].map((item) => (
                 <li key={item.href}>

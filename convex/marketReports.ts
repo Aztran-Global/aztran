@@ -11,6 +11,7 @@ import {
   marketReportTreasuryBills,
   publishStatus,
 } from "./contentValidators";
+import { distinctMonthKeysFromIsoDates, monthRange } from "./reportMonth";
 import { ensureUniqueSlug, slugFromTitle } from "./slugHelpers";
 
 const marketReportCreateArgs = {
@@ -55,14 +56,38 @@ const marketReportPatchArgs = v.object({
   disclaimer: v.optional(v.string()),
 });
 
-export const listPublishedMarketReportsPaginated = query({
-  args: { paginationOpts: paginationOptsValidator },
-  handler: async (ctx, { paginationOpts }) => {
-    return await ctx.db
+export const listPublishedMarketReportMonths = query({
+  args: {},
+  handler: async (ctx) => {
+    const rows = await ctx.db
       .query("marketReports")
       .withIndex("by_status_and_date", (q) => q.eq("status", "published"))
       .order("desc")
-      .paginate(paginationOpts);
+      .take(1000);
+    return distinctMonthKeysFromIsoDates(rows.map((r) => r.reportDate));
+  },
+});
+
+export const listPublishedMarketReportsPaginated = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+    month: v.optional(v.string()),
+  },
+  handler: async (ctx, { paginationOpts, month }) => {
+    let q = ctx.db
+      .query("marketReports")
+      .withIndex("by_status_and_date", (iq) => iq.eq("status", "published"))
+      .order("desc");
+    if (month) {
+      const { start, end } = monthRange(month);
+      q = q.filter((f) =>
+        f.and(
+          f.gte(f.field("reportDate"), start),
+          f.lte(f.field("reportDate"), end),
+        ),
+      );
+    }
+    return await q.paginate(paginationOpts);
   },
 });
 
