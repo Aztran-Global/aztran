@@ -17,6 +17,7 @@ import type * as dashboard from "../dashboard.js";
 import type * as emails_ContactAcknowledgement from "../emails/ContactAcknowledgement.js";
 import type * as emails_ContactNotification from "../emails/ContactNotification.js";
 import type * as emails_StaffInviteEmail from "../emails/StaffInviteEmail.js";
+import type * as insightCategories from "../insightCategories.js";
 import type * as insights from "../insights.js";
 import type * as interviews from "../interviews.js";
 import type * as marketReports from "../marketReports.js";
@@ -60,6 +61,7 @@ declare const fullApi: ApiFromModules<{
   "emails/ContactAcknowledgement": typeof emails_ContactAcknowledgement;
   "emails/ContactNotification": typeof emails_ContactNotification;
   "emails/StaffInviteEmail": typeof emails_StaffInviteEmail;
+  insightCategories: typeof insightCategories;
   insights: typeof insights;
   interviews: typeof interviews;
   marketReports: typeof marketReports;

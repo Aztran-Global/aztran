@@ -12,6 +12,11 @@ import {
 } from "./contentValidators";
 import { distinctMonthKeysFromIsoDates, monthRange } from "./reportMonth";
 import { ensureUniqueSlug, slugFromTitle } from "./slugHelpers";
+import {
+  MACRO_LANE_CATEGORIES,
+  MACRO_REPORT_CATEGORY,
+  isMacroLaneCategory,
+} from "./insightCategories";
 
 async function deleteInsightAssets(
   ctx: MutationCtx,
@@ -77,9 +82,6 @@ const insightPatchArgs = v.object({
   updatedBy: v.optional(v.string()),
 });
 
-const MACRO_REPORT_CATEGORY = "Macro Report";
-const LEGACY_MACRO_INFLATION_CATEGORY = "Inflation";
-
 export const listPublishedMacroMonths = query({
   args: {},
   handler: async (ctx) => {
@@ -89,11 +91,7 @@ export const listPublishedMacroMonths = query({
       .order("desc")
       .take(1000);
     const macroDates = rows
-      .filter(
-        (r) =>
-          r.category === MACRO_REPORT_CATEGORY ||
-          r.category === LEGACY_MACRO_INFLATION_CATEGORY,
-      )
+      .filter((r) => isMacroLaneCategory(r.category))
       .map((r) => r.referenceDate);
     return distinctMonthKeysFromIsoDates(macroDates);
   },
@@ -114,8 +112,7 @@ export const listPublishedInsightsPaginated = query({
       if (category === MACRO_REPORT_CATEGORY) {
         q = q.filter((f) =>
           f.or(
-            f.eq(f.field("category"), MACRO_REPORT_CATEGORY),
-            f.eq(f.field("category"), LEGACY_MACRO_INFLATION_CATEGORY),
+            ...MACRO_LANE_CATEGORIES.map((c) => f.eq(f.field("category"), c)),
           ),
         );
       } else {
