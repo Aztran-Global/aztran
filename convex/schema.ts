@@ -2,6 +2,7 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
   blogSection,
+  gdpData,
   insightMetric,
   insightSection,
   marketReportFgnBonds,
@@ -10,6 +11,7 @@ import {
   marketReportMoneyMarket,
   marketReportSsaEurobonds,
   marketReportTreasuryBills,
+  mpcData,
   publishStatus,
 } from "./contentValidators";
 
@@ -36,6 +38,10 @@ export default defineSchema({
     publishedAt: v.optional(v.number()),
     createdBy: v.optional(v.string()),
     updatedBy: v.optional(v.string()),
+    // Present when category === "GDP"
+    gdpData: v.optional(gdpData),
+    // Present when category === "MPC"
+    mpcData: v.optional(mpcData),
   })
     .index("by_status", ["status"])
     .index("by_slug", ["slug"])

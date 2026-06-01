@@ -9,3 +9,16 @@ export type ContactSubmissionDoc = Doc<"contactSubmissions">;
 
 export type PortfolioStatus = PortfolioDoc["status"];
 export type PortfolioSector = PortfolioDoc["sector"];
+
+/** Structured insight infographic data (synced with the Convex schema). */
+export type GdpData = NonNullable<InsightDoc["gdpData"]>;
+export type GdpHeadlineMetric = GdpData["headlineMetrics"][number];
+export type GdpSectorRow = GdpData["fastestGrowingSectors"][number];
+export type GdpSectorContribution = GdpData["sectorContributions"][number];
+
+export type MpcData = NonNullable<InsightDoc["mpcData"]>;
+export type MpcPolicyParameter = MpcData["parameters"][number];
+export type MpcParameterStatus = MpcPolicyParameter["status"];
+export type MpcSubParameter = NonNullable<
+  MpcPolicyParameter["subParameters"]
+>[number];

@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import {
   useCallback,
   useEffect,
-  useMemo,
   useState,
   type ReactElement,
 } from "react";
@@ -19,13 +18,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Collapsible,
   CollapsibleContent,
@@ -45,10 +37,16 @@ import { useConvexStaffSessionReady } from "@/hooks/useConvexStaffSessionReady";
 import { useRecaptchaGate } from "@/hooks/useRecaptchaGate";
 import { Switch } from "@/components/ui/switch";
 import { estimateInsightReadMinutes } from "@/lib/content-form-defaults";
+import { INSIGHT_CATEGORIES } from "@/lib/site-nav";
+import { CategorySelector } from "@/components/cms/CategorySelector";
+import { GdpDataEditor } from "@/components/cms/GdpDataEditor";
+import { MpcDataEditor } from "@/components/cms/MpcDataEditor";
+import { structuredKind } from "@/lib/insight-display";
 import {
-  INSIGHT_CATEGORIES,
-  INSIGHT_CATEGORY_ADMIN_OPTIONS,
-} from "@/lib/site-nav";
+  emptyGdpData,
+  emptyMpcData,
+} from "@/lib/structured-insight-defaults";
+import type { GdpData, MpcData } from "@/types";
 
 type StorageId = GenericId<"_storage">;
 
@@ -74,6 +72,8 @@ type FormState = {
   sourceInput: string;
   isFeatured: boolean;
   metrics: MetricDraft[];
+  gdpData?: GdpData;
+  mpcData?: MpcData;
   sections: SectionDraft[];
   summary: string;
   seoTitle: string;
@@ -158,6 +158,8 @@ function fromDoc(d: Doc<"insights">): FormState {
       momValue: m.momValue ?? "",
       momContext: m.momContext ?? "",
     })),
+    gdpData: d.gdpData,
+    mpcData: d.mpcData,
     sections:
       d.sections.length > 0
         ? d.sections.map((s) => ({
@@ -219,17 +221,26 @@ export function InsightForm({
 
   const previewCover = liveCoverUrl ?? coverUrl ?? null;
 
-  const categorySelectOptions = useMemo(() => {
-    const cur = form.category.trim();
-    if (cur && !INSIGHT_CATEGORY_ADMIN_OPTIONS.includes(cur)) {
-      return [cur, ...INSIGHT_CATEGORY_ADMIN_OPTIONS];
-    }
-    return [...INSIGHT_CATEGORY_ADMIN_OPTIONS];
-  }, [form.category]);
-
   const set = useCallback(<K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
   }, []);
+
+  // Changing category clears the previous structured data and initialises the
+  // new one with sensible defaults so each category only ever carries its own.
+  const onCategoryChange = useCallback((next: string) => {
+    setForm((f) => {
+      const kind = structuredKind(next);
+      return {
+        ...f,
+        category: next,
+        metrics: kind === "metrics" ? f.metrics : [],
+        gdpData: kind === "gdp" ? (f.gdpData ?? emptyGdpData()) : undefined,
+        mpcData: kind === "mpc" ? (f.mpcData ?? emptyMpcData()) : undefined,
+      };
+    });
+  }, []);
+
+  const kind = structuredKind(form.category);
 
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -286,7 +297,9 @@ export function InsightForm({
     sources: form.sources,
     status,
     isFeatured: form.isFeatured,
-    metrics: metricsToPayload(form.metrics),
+    metrics: kind === "metrics" ? metricsToPayload(form.metrics) : undefined,
+    gdpData: kind === "gdp" ? form.gdpData : undefined,
+    mpcData: kind === "mpc" ? form.mpcData : undefined,
     sections: payloadSections,
     coverImageId: form.coverImageId,
     pdfStorageId: form.pdfStorageId,
@@ -443,23 +456,7 @@ export function InsightForm({
         </div>
         <div>
           <Label>Category</Label>
-          <Select
-            value={form.category}
-            onValueChange={(v) => {
-              if (v) set("category", v);
-            }}
-          >
-            <SelectTrigger className="mt-2">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="max-h-[min(24rem,70vh)]">
-              {categorySelectOptions.map((c) => (
-                <SelectItem key={c} value={c}>
-                  {c}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <CategorySelector value={form.category} onChange={onCategoryChange} />
         </div>
         <div className="flex flex-col justify-end gap-2 rounded-lg border border-white/10 p-4">
           <div className="flex items-center justify-between">
@@ -547,95 +544,127 @@ export function InsightForm({
         </div>
       </div>
 
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <p className="font-body text-label uppercase tracking-wide text-[var(--color-cyan)]">
-            Hero metrics
-          </p>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setForm({ ...form, metrics: [...form.metrics, emptyMetric()] })}
-          >
-            <Plus className="mr-1 size-4" />
-            Add metric
-          </Button>
-        </div>
-        {form.metrics.length === 0 ? (
-          <p className="text-sm text-zinc-500">Optional infographic-style metrics.</p>
-        ) : null}
-        {form.metrics.map((m, idx) => (
-          <div
-            key={idx}
-            className="space-y-3 rounded-lg border border-white/10 p-4"
-          >
-            <div className="flex justify-end">
+      {kind !== "none" ? (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="font-body text-label uppercase tracking-wide text-[var(--color-cyan)]">
+              Structured Data
+            </p>
+            {kind === "metrics" ? (
               <Button
                 type="button"
-                variant="ghost"
+                variant="outline"
                 size="sm"
-                className="text-destructive"
                 onClick={() =>
-                  setForm({
-                    ...form,
-                    metrics: form.metrics.filter((_, i) => i !== idx),
-                  })
+                  setForm({ ...form, metrics: [...form.metrics, emptyMetric()] })
                 }
               >
-                <Trash2 className="size-4" />
+                <Plus className="mr-1 size-4" />
+                Add metric
               </Button>
-            </div>
-            <Input
-              placeholder="Label"
-              value={m.label}
-              onChange={(e) => {
-                const next = [...form.metrics];
-                next[idx] = { ...m, label: e.target.value };
-                setForm({ ...form, metrics: next });
-              }}
-            />
-            <div className="grid gap-2 md:grid-cols-2">
-              <Input
-                placeholder="YoY value"
-                value={m.yoyValue}
-                onChange={(e) => {
-                  const next = [...form.metrics];
-                  next[idx] = { ...m, yoyValue: e.target.value };
-                  setForm({ ...form, metrics: next });
-                }}
-              />
-              <Input
-                placeholder="YoY context"
-                value={m.yoyContext}
-                onChange={(e) => {
-                  const next = [...form.metrics];
-                  next[idx] = { ...m, yoyContext: e.target.value };
-                  setForm({ ...form, metrics: next });
-                }}
-              />
-              <Input
-                placeholder="MoM value"
-                value={m.momValue}
-                onChange={(e) => {
-                  const next = [...form.metrics];
-                  next[idx] = { ...m, momValue: e.target.value };
-                  setForm({ ...form, metrics: next });
-                }}
-              />
-              <Input
-                placeholder="MoM context"
-                value={m.momContext}
-                onChange={(e) => {
-                  const next = [...form.metrics];
-                  next[idx] = { ...m, momContext: e.target.value };
-                  setForm({ ...form, metrics: next });
-                }}
-              />
-            </div>
+            ) : null}
           </div>
-        ))}
-      </div>
+
+          <div className="rounded-lg border border-amber-400/30 bg-amber-400/10 px-4 py-2.5 font-body text-[13px] leading-relaxed text-amber-200/90">
+            Switching categories will clear any structured data entered for the
+            previous category.
+          </div>
+
+          {kind === "metrics" ? (
+            <div className="space-y-4">
+              {form.metrics.length === 0 ? (
+                <p className="text-sm text-zinc-500">
+                  Optional infographic-style YoY/MoM metric cards.
+                </p>
+              ) : null}
+              {form.metrics.map((m, idx) => (
+                <div
+                  key={idx}
+                  className="space-y-3 rounded-lg border border-white/10 p-4"
+                >
+                  <div className="flex justify-end">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="text-destructive"
+                      onClick={() =>
+                        setForm({
+                          ...form,
+                          metrics: form.metrics.filter((_, i) => i !== idx),
+                        })
+                      }
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </div>
+                  <Input
+                    placeholder="Label"
+                    value={m.label}
+                    onChange={(e) => {
+                      const next = [...form.metrics];
+                      next[idx] = { ...m, label: e.target.value };
+                      setForm({ ...form, metrics: next });
+                    }}
+                  />
+                  <div className="grid gap-2 md:grid-cols-2">
+                    <Input
+                      placeholder="YoY value"
+                      value={m.yoyValue}
+                      onChange={(e) => {
+                        const next = [...form.metrics];
+                        next[idx] = { ...m, yoyValue: e.target.value };
+                        setForm({ ...form, metrics: next });
+                      }}
+                    />
+                    <Input
+                      placeholder="YoY context"
+                      value={m.yoyContext}
+                      onChange={(e) => {
+                        const next = [...form.metrics];
+                        next[idx] = { ...m, yoyContext: e.target.value };
+                        setForm({ ...form, metrics: next });
+                      }}
+                    />
+                    <Input
+                      placeholder="MoM value"
+                      value={m.momValue}
+                      onChange={(e) => {
+                        const next = [...form.metrics];
+                        next[idx] = { ...m, momValue: e.target.value };
+                        setForm({ ...form, metrics: next });
+                      }}
+                    />
+                    <Input
+                      placeholder="MoM context"
+                      value={m.momContext}
+                      onChange={(e) => {
+                        const next = [...form.metrics];
+                        next[idx] = { ...m, momContext: e.target.value };
+                        setForm({ ...form, metrics: next });
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          {kind === "gdp" && form.gdpData ? (
+            <GdpDataEditor
+              value={form.gdpData}
+              onChange={(v) => set("gdpData", v)}
+            />
+          ) : null}
+
+          {kind === "mpc" && form.mpcData ? (
+            <MpcDataEditor
+              value={form.mpcData}
+              onChange={(v) => set("mpcData", v)}
+            />
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">

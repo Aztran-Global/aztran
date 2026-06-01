@@ -3,7 +3,13 @@ import { mutation, query, type MutationCtx } from "./_generated/server";
 import { v } from "convex/values";
 import { requireUser } from "./auth";
 import type { Id } from "./_generated/dataModel";
-import { insightMetric, insightSection, publishStatus } from "./contentValidators";
+import {
+  gdpData,
+  insightMetric,
+  insightSection,
+  mpcData,
+  publishStatus,
+} from "./contentValidators";
 import { distinctMonthKeysFromIsoDates, monthRange } from "./reportMonth";
 import { ensureUniqueSlug, slugFromTitle } from "./slugHelpers";
 
@@ -30,6 +36,8 @@ const insightCreateArgs = {
   status: publishStatus,
   isFeatured: v.boolean(),
   metrics: v.optional(v.array(insightMetric)),
+  gdpData: v.optional(gdpData),
+  mpcData: v.optional(mpcData),
   sections: v.array(insightSection),
   coverImageId: v.optional(v.id("_storage")),
   pdfStorageId: v.optional(v.id("_storage")),
@@ -54,6 +62,8 @@ const insightPatchArgs = v.object({
   status: v.optional(publishStatus),
   isFeatured: v.optional(v.boolean()),
   metrics: v.optional(v.array(insightMetric)),
+  gdpData: v.optional(gdpData),
+  mpcData: v.optional(mpcData),
   sections: v.optional(v.array(insightSection)),
   coverImageId: v.optional(v.id("_storage")),
   pdfStorageId: v.optional(v.id("_storage")),

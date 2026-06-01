@@ -82,6 +82,71 @@ export const insightSection = v.object({
   bullets: v.array(v.string()),
 });
 
+// ─── GDP report structured data (insights with category === "GDP") ───────────
+
+export const gdpHeadlineMetric = v.object({
+  label: v.string(), // "Real Q1 GDP Growth Rate"
+  value: v.string(), // "3.89%"
+  context: v.string(), // "From 3.13% in Q1 2025"
+  unit: v.optional(v.string()), // "%" | "₦TRN" | "mbpd"
+});
+
+export const gdpSectorRow = v.object({
+  sector: v.string(), // "Arts, Entertainment, & Recreation"
+  value: v.number(), // 11.25
+  unit: v.optional(v.string()), // "%" growth or "%" contribution
+});
+
+export const gdpData = v.object({
+  headlineMetrics: v.array(gdpHeadlineMetric),
+  fastestGrowingSectors: v.array(gdpSectorRow),
+  topContributingActivities: v.array(gdpSectorRow),
+  oilSectorSharePercent: v.number(), // 3.92
+  nonOilSectorSharePercent: v.number(), // 96.08
+  sectorContributions: v.array(
+    v.object({
+      sector: v.string(), // "Services" | "Agriculture" | "Industries"
+      sharePercent: v.number(), // 57.73
+    }),
+  ),
+});
+
+// ─── MPC report structured data (insights with category === "MPC") ───────────
+
+export const mpcPolicyParameter = v.object({
+  label: v.string(), // "MPR (Monetary Policy Rate)"
+  value: v.string(), // "26.5%"
+  status: v.union(
+    v.literal("retained"),
+    v.literal("increased"),
+    v.literal("decreased"),
+  ),
+  subParameters: v.optional(
+    v.array(
+      v.object({
+        label: v.string(), // "Commercial banks" | "Merchant banks"
+        value: v.string(), // "45%" | "16%"
+      }),
+    ),
+  ),
+  // For the SFC corridor: stores the asymmetric values
+  corridorValues: v.optional(
+    v.object({
+      upper: v.string(), // "+50"
+      lower: v.string(), // "-450"
+      standingLendingFacility: v.string(), // "27%"
+      standingDepositFacility: v.string(), // "22%"
+    }),
+  ),
+});
+
+export const mpcData = v.object({
+  meetingNumber: v.number(), // 305
+  meetingDates: v.string(), // "May 19–20, 2026"
+  parameters: v.array(mpcPolicyParameter),
+  decisions: v.array(v.string()), // bullet-point decisions verbatim
+});
+
 export const marketReportMoneyMarket = v.object({
   systemLiquiditySummary: v.optional(v.string()),
   rates: v.array(moneyMarketRate),

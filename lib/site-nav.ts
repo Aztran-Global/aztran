@@ -8,6 +8,15 @@ export const INSIGHT_CATEGORIES = {
   interviews: "Interviews",
 } as const;
 
+/**
+ * Structured-data insight categories. Each drives a dedicated infographic editor
+ * (admin) and renderer (public): GDP → `gdpData`, MPC → `mpcData`.
+ */
+export const STRUCTURED_INSIGHT_CATEGORIES = {
+  gdp: "GDP",
+  mpc: "MPC",
+} as const;
+
 /** Legacy `insights.category` values so older documents remain editable in admin. */
 export const LEGACY_INSIGHT_CATEGORIES = [
   "Inflation",
@@ -21,12 +30,14 @@ export const LEGACY_INSIGHT_CATEGORIES = [
 
 /**
  * Insight editor dropdown: public IA lanes first (must match strings above exactly),
- * then legacy options.
+ * then structured-data types, then legacy options.
  */
 export const INSIGHT_CATEGORY_ADMIN_OPTIONS: readonly string[] = [
   INSIGHT_CATEGORIES.macroReport,
   INSIGHT_CATEGORIES.marketReport,
   INSIGHT_CATEGORIES.marketBuzz,
+  STRUCTURED_INSIGHT_CATEGORIES.gdp,
+  STRUCTURED_INSIGHT_CATEGORIES.mpc,
   ...LEGACY_INSIGHT_CATEGORIES,
 ];
 

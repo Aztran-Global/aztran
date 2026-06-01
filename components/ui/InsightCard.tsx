@@ -2,9 +2,17 @@ import Link from "next/link";
 import type { ReactElement } from "react";
 import type { InsightDoc } from "@/types";
 import { cn } from "@/lib/utils";
+import {
+  gdpHeadlineValue,
+  insightCategoryPillClass,
+  mpcMprParameter,
+  mpcStatusClass,
+  mpcStatusLabel,
+} from "@/lib/insight-display";
 
 /**
  * Card surface for insights grids with hover accent and typographic hierarchy.
+ * GDP and MPC cards surface their headline figure (growth rate / MPR) in gold.
  */
 export function InsightCard({
   insight,
@@ -13,6 +21,10 @@ export function InsightCard({
   insight: InsightDoc;
   className?: string;
 }): ReactElement {
+  const isStructured = insight.category === "GDP" || insight.category === "MPC";
+  const gdpValue = insight.gdpData ? gdpHeadlineValue(insight.gdpData) : null;
+  const mpr = insight.mpcData ? mpcMprParameter(insight.mpcData) : null;
+
   return (
     <Link
       href={`/insights/${insight.slug}`}
@@ -21,15 +33,55 @@ export function InsightCard({
         className,
       )}
     >
-      <p className="font-body text-caption uppercase tracking-[0.2em] text-[var(--color-cyan)]">
-        {insight.category}
-      </p>
+      {isStructured ? (
+        <span
+          className={cn(
+            "w-fit rounded-full border px-2.5 py-0.5 font-body text-[11px] font-medium uppercase tracking-wide",
+            insightCategoryPillClass(insight.category),
+          )}
+        >
+          {insight.category}
+        </span>
+      ) : (
+        <p className="font-body text-caption uppercase tracking-[0.2em] text-[var(--color-cyan)]">
+          {insight.category}
+        </p>
+      )}
       <h3 className="mt-3 font-display text-h3 leading-snug text-[var(--color-navy)] group-hover:text-[var(--color-cyan)] dark:text-[var(--color-offwhite)]">
         {insight.title}
       </h3>
       <p className="mt-2 font-body text-caption text-[color-mix(in_srgb,var(--color-navy)_58%,transparent)] dark:text-[var(--color-silver)]">
         {insight.displayDate}
       </p>
+
+      {gdpValue ? (
+        <p className="mt-3 font-mono text-h3 font-semibold text-[var(--color-gold)]">
+          {gdpValue}
+          <span className="ml-2 font-body text-caption font-normal text-[color-mix(in_srgb,var(--color-navy)_55%,transparent)] dark:text-[var(--color-silver)]">
+            Real GDP Growth
+          </span>
+        </p>
+      ) : null}
+
+      {mpr ? (
+        <div className="mt-3">
+          <p className="font-mono text-h3 font-semibold text-[var(--color-gold)]">
+            {mpr.value}
+            <span className="ml-2 font-body text-caption font-normal text-[color-mix(in_srgb,var(--color-navy)_55%,transparent)] dark:text-[var(--color-silver)]">
+              MPR
+            </span>
+          </p>
+          <span
+            className={cn(
+              "mt-1.5 inline-block rounded-full border px-2 py-0.5 font-body text-[10px] font-medium uppercase tracking-wide",
+              mpcStatusClass(mpr.status),
+            )}
+          >
+            {mpcStatusLabel(mpr.status)}
+          </span>
+        </div>
+      ) : null}
+
       <p className="mt-3 line-clamp-3 flex-1 font-body text-body text-[color-mix(in_srgb,var(--color-navy)_88%,transparent)] dark:text-[var(--color-silver)]">
         {insight.summary}
       </p>

@@ -6,6 +6,8 @@ import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
 import { ConvexStorageImage } from "@/components/ui/ConvexStorageImage";
 import { InsightCard } from "@/components/ui/InsightCard";
+import { GdpReportBlock } from "@/components/insights/GdpReportBlock";
+import { MpcReportBlock } from "@/components/insights/MpcReportBlock";
 import { createPageMetadata } from "@/lib/seo";
 import { serverFetchQuery } from "@/lib/server-convex-query";
 
@@ -140,6 +142,10 @@ export default async function InsightArticlePage({
           </div>
         </div>
       ) : null}
+
+      {doc.gdpData ? <GdpReportBlock gdp={doc.gdpData} /> : null}
+
+      {doc.mpcData ? <MpcReportBlock mpc={doc.mpcData} /> : null}
 
       {doc.metrics && doc.metrics.length > 0 ? (
         <div className="mx-auto mt-14 max-w-[900px] px-4">
