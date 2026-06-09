@@ -2,6 +2,7 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
   blogSection,
+  capitalImportationData,
   gdpData,
   insightMetric,
   insightSection,
@@ -42,6 +43,8 @@ export default defineSchema({
     gdpData: v.optional(gdpData),
     // Present when category === "MPC"
     mpcData: v.optional(mpcData),
+    // Present when category === "Capital Importation"
+    capitalImportationData: v.optional(capitalImportationData),
   })
     .index("by_status", ["status"])
     .index("by_slug", ["slug"])

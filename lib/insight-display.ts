@@ -6,12 +6,13 @@ import type { GdpData, InsightDoc, MpcData } from "@/types";
 
 /**
  * Which structured-data editor/renderer a category drives.
- *  - "metrics": YoY/MoM inflation cards (Macro Report + legacy Inflation)
- *  - "gdp":     headline metrics + ranked bar charts (`gdpData`)
- *  - "mpc":     policy parameter cards (`mpcData`)
- *  - "none":    body sections only
+ *  - "metrics":              YoY/MoM inflation cards (Macro Report + legacy Inflation)
+ *  - "gdp":                  headline metrics + ranked bar charts (`gdpData`)
+ *  - "mpc":                  policy parameter cards (`mpcData`)
+ *  - "capital_importation":  inflow metrics, trend, composition, sectors (`capitalImportationData`)
+ *  - "none":                 body sections only
  */
-export type StructuredKind = "metrics" | "gdp" | "mpc" | "none";
+export type StructuredKind = "metrics" | "gdp" | "mpc" | "capital_importation" | "none";
 
 const METRIC_CATEGORIES: ReadonlySet<string> = new Set([
   INSIGHT_CATEGORIES.macroReport,
@@ -21,6 +22,7 @@ const METRIC_CATEGORIES: ReadonlySet<string> = new Set([
 export function structuredKind(category: string): StructuredKind {
   if (category === STRUCTURED_INSIGHT_CATEGORIES.gdp) return "gdp";
   if (category === STRUCTURED_INSIGHT_CATEGORIES.mpc) return "mpc";
+  if (category === STRUCTURED_INSIGHT_CATEGORIES.capitalImportation) return "capital_importation";
   if (METRIC_CATEGORIES.has(category)) return "metrics";
   return "none";
 }
@@ -32,6 +34,8 @@ export function insightCategoryPillClass(category: string): string {
       return "bg-[color-mix(in_srgb,var(--color-cyan)_18%,transparent)] text-[var(--color-cyan)] border-[color-mix(in_srgb,var(--color-cyan)_45%,transparent)]";
     case "MPC":
       return "bg-purple-500/15 text-purple-500 border-purple-500/40 dark:text-purple-300";
+    case "Capital Importation":
+      return "bg-emerald-500/15 text-emerald-600 border-emerald-500/40 dark:text-emerald-300";
     case "Inflation":
       return "bg-orange-500/15 text-orange-600 border-orange-500/40 dark:text-orange-300";
     case "Fixed Income":

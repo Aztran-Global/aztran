@@ -15,6 +15,7 @@ export const MACRO_LANE_CATEGORIES: readonly string[] = [
   LEGACY_MACRO_INFLATION_CATEGORY,
   "GDP",
   "MPC",
+  "Capital Importation",
 ];
 
 export function isMacroLaneCategory(category: string): boolean {

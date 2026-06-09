@@ -41,12 +41,14 @@ import { INSIGHT_CATEGORIES } from "@/lib/site-nav";
 import { CategorySelector } from "@/components/cms/CategorySelector";
 import { GdpDataEditor } from "@/components/cms/GdpDataEditor";
 import { MpcDataEditor } from "@/components/cms/MpcDataEditor";
+import { CapitalImportationDataEditor } from "@/components/cms/CapitalImportationDataEditor";
 import { structuredKind } from "@/lib/insight-display";
 import {
+  emptyCapitalImportationData,
   emptyGdpData,
   emptyMpcData,
 } from "@/lib/structured-insight-defaults";
-import type { GdpData, MpcData } from "@/types";
+import type { CapitalImportationData, GdpData, MpcData } from "@/types";
 
 type StorageId = GenericId<"_storage">;
 
@@ -74,6 +76,7 @@ type FormState = {
   metrics: MetricDraft[];
   gdpData?: GdpData;
   mpcData?: MpcData;
+  capitalImportationData?: CapitalImportationData;
   sections: SectionDraft[];
   summary: string;
   seoTitle: string;
@@ -160,6 +163,7 @@ function fromDoc(d: Doc<"insights">): FormState {
     })),
     gdpData: d.gdpData,
     mpcData: d.mpcData,
+    capitalImportationData: d.capitalImportationData,
     sections:
       d.sections.length > 0
         ? d.sections.map((s) => ({
@@ -236,6 +240,10 @@ export function InsightForm({
         metrics: kind === "metrics" ? f.metrics : [],
         gdpData: kind === "gdp" ? (f.gdpData ?? emptyGdpData()) : undefined,
         mpcData: kind === "mpc" ? (f.mpcData ?? emptyMpcData()) : undefined,
+        capitalImportationData:
+          kind === "capital_importation"
+            ? (f.capitalImportationData ?? emptyCapitalImportationData())
+            : undefined,
       };
     });
   }, []);
@@ -300,6 +308,8 @@ export function InsightForm({
     metrics: kind === "metrics" ? metricsToPayload(form.metrics) : undefined,
     gdpData: kind === "gdp" ? form.gdpData : undefined,
     mpcData: kind === "mpc" ? form.mpcData : undefined,
+    capitalImportationData:
+      kind === "capital_importation" ? form.capitalImportationData : undefined,
     sections: payloadSections,
     coverImageId: form.coverImageId,
     pdfStorageId: form.pdfStorageId,
@@ -661,6 +671,13 @@ export function InsightForm({
             <MpcDataEditor
               value={form.mpcData}
               onChange={(v) => set("mpcData", v)}
+            />
+          ) : null}
+
+          {kind === "capital_importation" && form.capitalImportationData ? (
+            <CapitalImportationDataEditor
+              value={form.capitalImportationData}
+              onChange={(v) => set("capitalImportationData", v)}
             />
           ) : null}
         </div>

@@ -147,6 +147,52 @@ export const mpcData = v.object({
   decisions: v.array(v.string()), // bullet-point decisions verbatim
 });
 
+// ─── Capital Importation report (insights with category === "Capital Importation") ─
+
+export const capitalImportationHeadlineMetric = v.object({
+  label: v.string(),
+  value: v.string(),
+  change: v.optional(v.string()),
+  subtext: v.optional(v.string()),
+});
+
+export const capitalImportationQuarterRow = v.object({
+  quarter: v.string(),
+  value: v.number(),
+});
+
+export const capitalImportationCompositionRow = v.object({
+  label: v.string(),
+  sharePercent: v.number(),
+});
+
+export const capitalImportationSectorRow = v.object({
+  sector: v.string(),
+  sharePercent: v.number(),
+});
+
+export const capitalImportationCountryRow = v.object({
+  country: v.string(),
+  inflowMn: v.number(),
+  sharePercent: v.number(),
+});
+
+export const capitalImportationBankRow = v.object({
+  bank: v.string(),
+  sharePercent: v.number(),
+});
+
+export const capitalImportationData = v.object({
+  period: v.string(),
+  headlineMetrics: v.array(capitalImportationHeadlineMetric),
+  quarterlyTrend: v.array(capitalImportationQuarterRow),
+  composition: v.array(capitalImportationCompositionRow),
+  topSectors: v.array(capitalImportationSectorRow),
+  countryOrigins: v.array(capitalImportationCountryRow),
+  topBanks: v.array(capitalImportationBankRow),
+  keyInsights: v.array(v.string()),
+});
+
 export const marketReportMoneyMarket = v.object({
   systemLiquiditySummary: v.optional(v.string()),
   rates: v.array(moneyMarketRate),

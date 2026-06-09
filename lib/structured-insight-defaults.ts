@@ -1,4 +1,4 @@
-import type { GdpData, MpcData } from "@/types";
+import type { CapitalImportationData, GdpData, MpcData } from "@/types";
 
 /** Sensible empty GDP payload used when switching a draft into the GDP category. */
 export function emptyGdpData(): GdpData {
@@ -25,6 +25,29 @@ export function emptyGdpData(): GdpData {
       { sector: "Agriculture", sharePercent: 0 },
       { sector: "Industries", sharePercent: 0 },
     ],
+  };
+}
+
+/** Sensible empty Capital Importation payload used when switching a draft into that category. */
+export function emptyCapitalImportationData(): CapitalImportationData {
+  return {
+    period: "",
+    headlineMetrics: [
+      { label: "Total Capital Importation", value: "", change: "", subtext: "" },
+      { label: "Portfolio Investment (FPI)", value: "", change: "", subtext: "" },
+      { label: "Foreign Direct Investment", value: "", change: "", subtext: "" },
+      { label: "Other Investments", value: "", change: "", subtext: "" },
+    ],
+    quarterlyTrend: [],
+    composition: [
+      { label: "FPI", sharePercent: 0 },
+      { label: "FDI", sharePercent: 0 },
+      { label: "Other", sharePercent: 0 },
+    ],
+    topSectors: [],
+    countryOrigins: [],
+    topBanks: [],
+    keyInsights: [],
   };
 }
 

@@ -15,6 +15,7 @@ export const INSIGHT_CATEGORIES = {
 export const STRUCTURED_INSIGHT_CATEGORIES = {
   gdp: "GDP",
   mpc: "MPC",
+  capitalImportation: "Capital Importation",
 } as const;
 
 /** Legacy `insights.category` values so older documents remain editable in admin. */
@@ -38,6 +39,7 @@ export const INSIGHT_CATEGORY_ADMIN_OPTIONS: readonly string[] = [
   INSIGHT_CATEGORIES.marketBuzz,
   STRUCTURED_INSIGHT_CATEGORIES.gdp,
   STRUCTURED_INSIGHT_CATEGORIES.mpc,
+  STRUCTURED_INSIGHT_CATEGORIES.capitalImportation,
   ...LEGACY_INSIGHT_CATEGORIES,
 ];
 

@@ -49,7 +49,7 @@ const config: Config = {
         },
       },
       animation: {
-        "marquee-slow": "marquee-x 70s linear infinite",
+        "marquee-slow": "marquee-x 150s linear infinite",
         "marquee-medium": "marquee-x 52s linear infinite",
         "marquee-fast": "marquee-x 38s linear infinite",
       },

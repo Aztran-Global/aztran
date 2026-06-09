@@ -50,6 +50,7 @@ export const seedInsights = internalMutation({
         metrics: row.metrics,
         gdpData: row.gdpData,
         mpcData: row.mpcData,
+        capitalImportationData: row.capitalImportationData,
         publishedAt,
       });
       console.log(`Seeded: ${slug}`);

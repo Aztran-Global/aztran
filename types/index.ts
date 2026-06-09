@@ -22,3 +22,11 @@ export type MpcParameterStatus = MpcPolicyParameter["status"];
 export type MpcSubParameter = NonNullable<
   MpcPolicyParameter["subParameters"]
 >[number];
+
+export type CapitalImportationData = NonNullable<InsightDoc["capitalImportationData"]>;
+export type CapitalImportationHeadlineMetric = CapitalImportationData["headlineMetrics"][number];
+export type CapitalImportationQuarterRow = CapitalImportationData["quarterlyTrend"][number];
+export type CapitalImportationCompositionRow = CapitalImportationData["composition"][number];
+export type CapitalImportationSectorRow = CapitalImportationData["topSectors"][number];
+export type CapitalImportationCountryRow = CapitalImportationData["countryOrigins"][number];
+export type CapitalImportationBankRow = CapitalImportationData["topBanks"][number];
