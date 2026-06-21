@@ -5,6 +5,7 @@ import { requireUser } from "./auth";
 import { blogSection, publishStatus } from "./contentValidators";
 import { ensureUniqueSlug, slugFromTitle } from "./slugHelpers";
 import type { Doc } from "./_generated/dataModel";
+import { distinctMonthKeysFromIsoDates, monthRange } from "./reportMonth";
 
 async function deleteBlogAssets(ctx: MutationCtx, row: Doc<"blogPosts">) {
   if (row.coverImageId) {
@@ -67,8 +68,9 @@ export const listPublishedBlogPostsPaginated = query({
   args: {
     paginationOpts: paginationOptsValidator,
     category: v.optional(v.string()),
+    month: v.optional(v.string()),
   },
-  handler: async (ctx, { paginationOpts, category }) => {
+  handler: async (ctx, { paginationOpts, category, month }) => {
     let q = ctx.db
       .query("blogPosts")
       .withIndex("by_status_referenceDate", (iq) => iq.eq("status", "published"))
@@ -76,7 +78,28 @@ export const listPublishedBlogPostsPaginated = query({
     if (category && category !== "All") {
       q = q.filter((f) => f.eq(f.field("category"), category));
     }
+    if (month) {
+      const { start, end } = monthRange(month);
+      q = q.filter((f) =>
+        f.and(
+          f.gte(f.field("referenceDate"), start),
+          f.lte(f.field("referenceDate"), end),
+        ),
+      );
+    }
     return await q.paginate(paginationOpts);
+  },
+});
+
+export const listPublishedBlogPostMonths = query({
+  args: {},
+  handler: async (ctx) => {
+    const rows = await ctx.db
+      .query("blogPosts")
+      .withIndex("by_status_referenceDate", (q) => q.eq("status", "published"))
+      .order("desc")
+      .take(1000);
+    return distinctMonthKeysFromIsoDates(rows.map((r) => r.referenceDate));
   },
 });
 

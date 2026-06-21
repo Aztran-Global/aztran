@@ -19,7 +19,7 @@ import {
 } from "@/lib/report-month";
 
 type ReportMonthFilterProps = {
-  lane: "macro" | "market";
+  lane: "macro" | "market" | "buzz";
   value: string;
   onChange: (month: string) => void;
   /** Sync selection to `?month=YYYY-MM` in the URL. */
@@ -39,7 +39,9 @@ function ReportMonthFilterInner({
   const availableMonths = useQuery(
     lane === "macro"
       ? api.insights.listPublishedMacroMonths
-      : api.marketReports.listPublishedMarketReportMonths,
+      : lane === "market"
+        ? api.marketReports.listPublishedMarketReportMonths
+        : api.blogPosts.listPublishedBlogPostMonths,
     {},
   );
 

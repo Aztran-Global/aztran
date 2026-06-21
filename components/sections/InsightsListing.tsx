@@ -45,12 +45,16 @@ export function InsightsListing({
   const setMacroMonth = useUiStore((s) => s.setMacroReportMonth);
   const marketMonth = useUiStore((s) => s.marketReportMonth);
   const setMarketMonth = useUiStore((s) => s.setMarketReportMonth);
+  const buzzMonth = useUiStore((s) => s.marketBuzzMonth);
+  const setBuzzMonth = useUiStore((s) => s.setMarketBuzzMonth);
 
   const isMacroLane =
     forcedCategory === INSIGHT_CATEGORIES.macroReport ||
     (forcedCategory === undefined && hubTab === "macro_report");
   const isMarketLane =
     forcedCategory === undefined && hubTab === "market_report";
+  const isBuzzLane =
+    forcedCategory === undefined && hubTab === "market_buzz";
 
   const onSelectTab = useCallback(
     (id: InsightHubTab) => {
@@ -76,6 +80,14 @@ export function InsightsListing({
     [setMarketMonth, setResearchFeedLimit],
   );
 
+  const onBuzzMonthChange = useCallback(
+    (value: string) => {
+      setBuzzMonth(value);
+      setResearchFeedLimit(18);
+    },
+    [setBuzzMonth, setResearchFeedLimit],
+  );
+
   const mergedMarket = useQuery(
     api.researchFeed.getMergedMarketLaneFeed,
     forcedCategory === undefined && hubTab === "market_report"
@@ -85,7 +97,7 @@ export function InsightsListing({
   const mergedBuzz = useQuery(
     api.researchFeed.getMergedBuzzLaneFeed,
     forcedCategory === undefined && hubTab === "market_buzz"
-      ? { limit: researchFeedLimit }
+      ? { limit: researchFeedLimit, month: buzzMonth }
       : "skip",
   );
   const macroFeed = useQuery(
@@ -140,14 +152,14 @@ export function InsightsListing({
     !loadingMerged &&
     mergedItems !== undefined &&
     mergedItems.length === 0 &&
-    (hubTab === "macro_report" || hubTab === "market_report");
+    (hubTab === "macro_report" || hubTab === "market_report" || hubTab === "market_buzz");
 
   const emptyInsightsOnly =
     !loadingInsights &&
     forcedCategory !== undefined &&
     insightResults.length === 0;
 
-  const activeMonth = isMacroLane ? macroMonth : marketMonth;
+  const activeMonth = isMacroLane ? macroMonth : isBuzzLane ? buzzMonth : marketMonth;
   const emptyMonthLabel = formatMonthLabel(activeMonth);
 
   return (
@@ -198,6 +210,15 @@ export function InsightsListing({
           lane="market"
           value={marketMonth}
           onChange={onMarketMonthChange}
+          syncUrl={syncUrl}
+        />
+      ) : null}
+
+      {isBuzzLane ? (
+        <ReportMonthFilter
+          lane="buzz"
+          value={buzzMonth}
+          onChange={onBuzzMonthChange}
           syncUrl={syncUrl}
         />
       ) : null}
@@ -273,8 +294,13 @@ export function InsightsListing({
           {emptyMerged ? (
             <div className="rounded-2xl border border-[color-mix(in_srgb,var(--color-silver)_40%,transparent)] bg-[color-mix(in_srgb,var(--color-offwhite)_80%,var(--color-white))] px-8 py-14 text-center dark:border-[color-mix(in_srgb,var(--color-silver)_22%,transparent)] dark:bg-[color-mix(in_srgb,var(--color-navy)_90%,black)]">
               <p className="font-display text-h3 text-[var(--color-navy)] dark:text-[var(--color-offwhite)]">
-                No {hubTab === "macro_report" ? "macro" : "market"} reports for{" "}
-                {emptyMonthLabel}
+                No{" "}
+                {hubTab === "macro_report"
+                  ? "macro reports"
+                  : hubTab === "market_buzz"
+                    ? "market buzz"
+                    : "market reports"}{" "}
+                for {emptyMonthLabel}
               </p>
               <p className="mx-auto mt-3 max-w-sm font-body text-body text-[color-mix(in_srgb,var(--color-navy)_62%,transparent)] dark:text-[var(--color-silver)]">
                 Try another month from the filter above.
@@ -293,20 +319,6 @@ export function InsightsListing({
             </div>
           ) : null}
 
-          {showHubTabs &&
-          hubTab === "market_buzz" &&
-          !loading &&
-          mergedItems !== undefined &&
-          mergedItems.length === 0 ? (
-            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--color-silver)_40%,transparent)] bg-[color-mix(in_srgb,var(--color-offwhite)_80%,var(--color-white))] px-8 py-14 text-center dark:border-[color-mix(in_srgb,var(--color-silver)_22%,transparent)] dark:bg-[color-mix(in_srgb,var(--color-navy)_90%,black)]">
-              <p className="font-display text-h3 text-[var(--color-navy)] dark:text-[var(--color-offwhite)]">
-                Coming soon
-              </p>
-              <p className="mx-auto mt-3 max-w-sm font-body text-body text-[color-mix(in_srgb,var(--color-navy)_62%,transparent)] dark:text-[var(--color-silver)]">
-                Check back shortly for updates.
-              </p>
-            </div>
-          ) : null}
         </>
       )}
     </div>

@@ -24,6 +24,8 @@ interface UiState {
   setMacroReportMonth: (value: string) => void;
   marketReportMonth: string;
   setMarketReportMonth: (value: string) => void;
+  marketBuzzMonth: string;
+  setMarketBuzzMonth: (value: string) => void;
   blogCategory: string;
   setBlogCategory: (value: string) => void;
 }
@@ -46,6 +48,8 @@ export const useUiStore = create<UiState>((set) => ({
   setMacroReportMonth: (macroReportMonth) => set({ macroReportMonth }),
   marketReportMonth: currentMonthKey(),
   setMarketReportMonth: (marketReportMonth) => set({ marketReportMonth }),
+  marketBuzzMonth: currentMonthKey(),
+  setMarketBuzzMonth: (marketBuzzMonth) => set({ marketBuzzMonth }),
   blogCategory: "All",
   setBlogCategory: (blogCategory) => set({ blogCategory }),
 }));

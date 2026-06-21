@@ -1,14 +1,16 @@
 "use client";
 
 import { usePaginatedQuery, useQuery } from "convex/react";
-import { useMemo, type ReactElement } from "react";
+import { useCallback, useMemo, type ReactElement } from "react";
 import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
 import { BlogCard } from "@/components/ui/BlogCard";
+import { ReportMonthFilter } from "@/components/sections/ReportMonthFilter";
 import { useUiStore } from "@/store/uiStore";
 import { AnimatePresence, motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { formatMonthLabel } from "@/lib/report-month";
 
 export function BlogListing({
   hideCategoryTabs = false,
@@ -18,6 +20,15 @@ export function BlogListing({
 } = {}): ReactElement {
   const category = useUiStore((s) => s.blogCategory);
   const setCategory = useUiStore((s) => s.setBlogCategory);
+  const month = useUiStore((s) => s.marketBuzzMonth);
+  const setMonth = useUiStore((s) => s.setMarketBuzzMonth);
+
+  const onMonthChange = useCallback(
+    (value: string) => {
+      setMonth(value);
+    },
+    [setMonth],
+  );
 
   const categoryList = useQuery(
     api.blogPosts.getPublishedBlogCategories,
@@ -26,7 +37,7 @@ export function BlogListing({
   const { results, status, loadMore } = usePaginatedQuery(
     api.blogPosts.listPublishedBlogPostsPaginated,
     hideCategoryTabs
-      ? {}
+      ? { month }
       : { category: category === "All" ? undefined : category },
     { initialNumItems: 9 },
   );
@@ -37,8 +48,14 @@ export function BlogListing({
   );
   const loading = status === "LoadingFirstPage";
 
+  const emptyMonthLabel = formatMonthLabel(month);
+
   return (
     <div>
+      {hideCategoryTabs ? (
+        <ReportMonthFilter lane="buzz" value={month} onChange={onMonthChange} />
+      ) : null}
+
       {!hideCategoryTabs ? (
         <div
           className="mb-10 flex flex-wrap gap-3 border-b border-[color-mix(in_srgb,var(--color-silver)_45%,transparent)] pb-6 dark:border-[color-mix(in_srgb,var(--color-silver)_22%,transparent)]"
@@ -89,6 +106,17 @@ export function BlogListing({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {!loading && hideCategoryTabs && results.length === 0 ? (
+        <div className="rounded-2xl border border-[color-mix(in_srgb,var(--color-silver)_40%,transparent)] bg-[color-mix(in_srgb,var(--color-offwhite)_80%,var(--color-white))] px-8 py-14 text-center dark:border-[color-mix(in_srgb,var(--color-silver)_22%,transparent)] dark:bg-[color-mix(in_srgb,var(--color-navy)_90%,black)]">
+          <p className="font-display text-h3 text-[var(--color-navy)] dark:text-[var(--color-offwhite)]">
+            No market buzz for {emptyMonthLabel}
+          </p>
+          <p className="mx-auto mt-3 max-w-sm font-body text-body text-[color-mix(in_srgb,var(--color-navy)_62%,transparent)] dark:text-[var(--color-silver)]">
+            Try another month from the filter above.
+          </p>
+        </div>
+      ) : null}
 
       {status === "CanLoadMore" ? (
         <div className="mt-10 flex justify-center">

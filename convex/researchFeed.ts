@@ -68,14 +68,23 @@ export const getMergedMarketLaneFeed = query({
 
 /** Blog posts only (matches `/insights/market-buzz`). */
 export const getMergedBuzzLaneFeed = query({
-  args: { limit: v.number() },
-  handler: async (ctx, { limit }) => {
+  args: { limit: v.number(), month: v.optional(v.string()) },
+  handler: async (ctx, { limit, month }) => {
     const cap = Math.min(Math.max(limit, 1), 150);
-    const blogs = await ctx.db
+    let q = ctx.db
       .query("blogPosts")
       .withIndex("by_status_referenceDate", (q) => q.eq("status", "published"))
-      .order("desc")
-      .take(cap);
+      .order("desc");
+    if (month) {
+      const { start, end } = monthRange(month);
+      q = q.filter((f) =>
+        f.and(
+          f.gte(f.field("referenceDate"), start),
+          f.lte(f.field("referenceDate"), end),
+        ),
+      );
+    }
+    const blogs = await q.take(cap);
     return blogs.map((doc) => ({
       kind: "blog" as const,
       ref: doc.referenceDate,
