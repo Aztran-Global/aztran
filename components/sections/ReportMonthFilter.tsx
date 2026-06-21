@@ -101,9 +101,6 @@ function ReportMonthFilterInner({
 }
 
 export function ReportMonthFilter(props: ReportMonthFilterProps): ReactElement {
-  if (!props.syncUrl) {
-    return <ReportMonthFilterInner {...props} />;
-  }
   return (
     <Suspense
       fallback={
