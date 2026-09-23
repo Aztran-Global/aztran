@@ -138,6 +138,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${cormorant.variable} ${manrope.variable} min-h-svh flex flex-col bg-[var(--color-offwhite)] font-body text-body text-[var(--color-navy)] antialiased dark:bg-[var(--color-navy)] dark:text-[var(--color-offwhite)]`}
       >
         {/* Third-party scripts must be outside client provider trees to avoid React script-in-client errors */}

@@ -1,6 +1,7 @@
 import {
   BarChart3,
   Briefcase,
+  Clapperboard,
   FileText,
   Inbox,
   LayoutDashboard,
@@ -22,6 +23,11 @@ export const ADMIN_NAV: readonly AdminNavItem[] = [
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/market-reports", label: "Market reports", icon: LineChart },
   { href: "/admin/interviews", label: "Interviews", icon: Mic },
+  {
+    href: "/admin/market-recaps",
+    label: "Market Recaps",
+    icon: Clapperboard,
+  },
   { href: "/admin/portfolio", label: "Portfolio", icon: Briefcase },
   { href: "/admin/stats", label: "Stats", icon: BarChart3 },
   { href: "/admin/contacts", label: "Contacts", icon: Inbox },

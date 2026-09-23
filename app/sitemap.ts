@@ -26,6 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let blogSlugs: string[] = [];
   let reportSlugs: string[] = [];
   let interviewSlugs: string[] = [];
+  let marketRecapSlugs: string[] = [];
 
   try {
     insightSlugs = filterIndexableSlugs(
@@ -59,6 +60,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     interviewSlugs = [];
   }
 
+  try {
+    marketRecapSlugs = filterIndexableSlugs(
+      await serverFetchQuery(api.marketRecaps.getAllMarketRecapSlugs),
+    );
+  } catch {
+    marketRecapSlugs = [];
+  }
+
   const staticRoutes: MetadataRoute.Sitemap = [
     "/",
     "/about",
@@ -69,6 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/insights/market-report",
     "/insights/market-buzz",
     "/insights/interviews",
+    "/insights/market-recaps",
     "/contact",
   ].map((path) => ({
     url: absoluteUrl(path),
@@ -114,6 +124,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  const marketRecapRoutes: MetadataRoute.Sitemap = marketRecapSlugs.map(
+    (slug) => ({
+      url: absoluteUrl(`/insights/market-recaps/${slug}`),
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }),
+  );
+
   return [
     ...staticRoutes,
     ...serviceRoutes,
@@ -121,5 +140,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...blogRoutes,
     ...reportRoutes,
     ...interviewRoutes,
+    ...marketRecapRoutes,
   ];
 }

@@ -46,3 +46,9 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+# Markdown files are ignored by default (AI agent instructions, skill docs,
+# reference files, etc.); real project docs are re-included explicitly.
+*.md
+!README.md
+!docs/**/*.md

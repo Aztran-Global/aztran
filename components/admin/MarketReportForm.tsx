@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "convex/react";
 import slugify from "slugify";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useCallback, useEffect, useState, type ReactElement } from "react";
+import { useCallback, useState, type ReactElement } from "react";
 import { toast } from "sonner";
 import { api } from "@/convex/_generated/api";
 import type { Doc, Id } from "@/convex/_generated/dataModel";
@@ -27,6 +27,7 @@ import {
 import { PdfUploader } from "@/components/admin/PdfUploader";
 import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import { useConvexStaffSessionReady } from "@/hooks/useConvexStaffSessionReady";
+import { useHydratedFormState } from "@/hooks/useHydratedFormState";
 import { useRecaptchaGate } from "@/hooks/useRecaptchaGate";
 import { defaultMarketReportPayload } from "@/lib/content-form-defaults";
 
@@ -99,25 +100,17 @@ export function MarketReportForm({
   const unpublishM = useMutation(api.marketReports.unpublishMarketReport);
   const deleteM = useMutation(api.marketReports.deleteMarketReport);
 
-  const [form, setForm] = useState<MRBody>(() => emptyDoc());
-  const [hydrated, setHydrated] = useState(!reportId);
+  const [form, setForm, hydrated] = useHydratedFormState(
+    reportId,
+    existing,
+    emptyDoc,
+    fromRow,
+  );
   const [confirmOpen, setConfirmOpen] = useState(false);
-
-  useEffect(() => {
-    if (!reportId) {
-      setForm(emptyDoc());
-      setHydrated(true);
-      return;
-    }
-    if (existing) {
-      setForm(fromRow(existing));
-      setHydrated(true);
-    }
-  }, [reportId, existing]);
 
   const setTop = useCallback(<K extends keyof MRBody>(key: K, value: MRBody[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
-  }, []);
+  }, [setForm]);
 
   if (reportId && !hydrated) {
     return <div className="p-8 text-sm text-zinc-400">Loading…</div>;

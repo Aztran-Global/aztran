@@ -4,12 +4,7 @@ import { useMutation, useQuery } from "convex/react";
 import slugify from "slugify";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import {
-  useCallback,
-  useEffect,
-  useState,
-  type ReactElement,
-} from "react";
+import { useCallback, useState, type ReactElement } from "react";
 import { toast } from "sonner";
 import type { GenericId } from "convex/values";
 import { api } from "@/convex/_generated/api";
@@ -34,6 +29,7 @@ import { ImageUploader } from "@/components/admin/ImageUploader";
 import { PdfUploader } from "@/components/admin/PdfUploader";
 import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import { useConvexStaffSessionReady } from "@/hooks/useConvexStaffSessionReady";
+import { useHydratedFormState } from "@/hooks/useHydratedFormState";
 import { useRecaptchaGate } from "@/hooks/useRecaptchaGate";
 import { Switch } from "@/components/ui/switch";
 import { estimateInsightReadMinutes } from "@/lib/content-form-defaults";
@@ -203,20 +199,12 @@ export function InsightForm({
   const unpublishInsight = useMutation(api.insights.unpublishInsight);
   const deleteInsight = useMutation(api.insights.deleteInsight);
 
-  const [form, setForm] = useState<FormState>(() => emptyForm());
-  const [hydrated, setHydrated] = useState(!insightId);
-
-  useEffect(() => {
-    if (!insightId) {
-      setForm(emptyForm());
-      setHydrated(true);
-      return;
-    }
-    if (existing) {
-      setForm(fromDoc(existing));
-      setHydrated(true);
-    }
-  }, [insightId, existing]);
+  const [form, setForm, hydrated] = useHydratedFormState(
+    insightId,
+    existing,
+    emptyForm,
+    fromDoc,
+  );
 
   const liveCoverUrl = useQuery(
     api.storage.getFileUrl,
@@ -227,7 +215,7 @@ export function InsightForm({
 
   const set = useCallback(<K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
-  }, []);
+  }, [setForm]);
 
   // Changing category clears the previous structured data and initialises the
   // new one with sensible defaults so each category only ever carries its own.
@@ -246,7 +234,7 @@ export function InsightForm({
             : undefined,
       };
     });
-  }, []);
+  }, [setForm]);
 
   const kind = structuredKind(form.category);
 

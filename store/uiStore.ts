@@ -6,7 +6,8 @@ export type InsightHubTab =
   | "macro_report"
   | "market_report"
   | "market_buzz"
-  | "interviews";
+  | "interviews"
+  | "market_recaps";
 
 interface UiState {
   isScrolled: boolean;

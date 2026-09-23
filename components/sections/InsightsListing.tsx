@@ -9,6 +9,7 @@ import { InsightCard } from "@/components/ui/InsightCard";
 import { ResearchFeedCard } from "@/components/ui/ResearchFeedCard";
 import { ReportMonthFilter } from "@/components/sections/ReportMonthFilter";
 import { InterviewsListing } from "@/components/sections/InterviewsListing";
+import { MarketRecapsListing } from "@/components/sections/MarketRecapsListing";
 import { useUiStore, type InsightHubTab } from "@/store/uiStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ const HUB_TABS: readonly { id: InsightHubTab; label: string }[] = [
   { id: "market_report", label: "Market Report" },
   { id: "market_buzz", label: "Market Buzz" },
   { id: "interviews", label: "Interviews" },
+  { id: "market_recaps", label: "Market Recaps" },
 ] as const;
 
 type InsightsListingProps = {
@@ -142,6 +144,7 @@ export function InsightsListing({
 
   const showHubTabs = forcedCategory === undefined;
   const showInterviewsHub = showHubTabs && hubTab === "interviews";
+  const showMarketRecapsHub = showHubTabs && hubTab === "market_recaps";
 
   const canLoadMoreMerged =
     showHubTabs &&
@@ -225,6 +228,8 @@ export function InsightsListing({
 
       {showInterviewsHub ? (
         <InterviewsListing />
+      ) : showMarketRecapsHub ? (
+        <MarketRecapsListing />
       ) : (
         <>
           <AnimatePresence mode="popLayout">

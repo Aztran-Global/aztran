@@ -60,8 +60,18 @@ function useStaffConvexAuth(): {
   );
 
   useEffect(() => {
-    void fetchAccessToken({ forceRefreshToken: false });
-  }, [fetchAccessToken]);
+    let cancelled = false;
+    void (async () => {
+      const token = await fetchStaffConvexAccessToken({
+        forceRefreshToken: false,
+      });
+      if (cancelled) return;
+      setAuthState({ isLoading: false, isAuthenticated: !!token });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return useMemo(
     () => ({

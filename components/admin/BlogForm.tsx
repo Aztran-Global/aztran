@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "convex/react";
 import slugify from "slugify";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useCallback, useEffect, useState, type ReactElement } from "react";
+import { useCallback, useState, type ReactElement } from "react";
 import { toast } from "sonner";
 import type { GenericId } from "convex/values";
 import { api } from "@/convex/_generated/api";
@@ -36,6 +36,7 @@ import { ImageUploader } from "@/components/admin/ImageUploader";
 import { MarketingSiteBlogNote } from "@/components/admin/MarketingSiteBlogNote";
 import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import { useConvexStaffSessionReady } from "@/hooks/useConvexStaffSessionReady";
+import { useHydratedFormState } from "@/hooks/useHydratedFormState";
 import { useRecaptchaGate } from "@/hooks/useRecaptchaGate";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -189,20 +190,12 @@ export function BlogForm({
   const unpublishBlogPost = useMutation(api.blogPosts.unpublishBlogPost);
   const deleteBlogPost = useMutation(api.blogPosts.deleteBlogPost);
 
-  const [form, setForm] = useState<FormState>(() => emptyForm());
-  const [hydrated, setHydrated] = useState(!postId);
-
-  useEffect(() => {
-    if (!postId) {
-      setForm(emptyForm());
-      setHydrated(true);
-      return;
-    }
-    if (existing) {
-      setForm(fromDoc(existing));
-      setHydrated(true);
-    }
-  }, [postId, existing]);
+  const [form, setForm, hydrated] = useHydratedFormState(
+    postId,
+    existing,
+    emptyForm,
+    fromDoc,
+  );
 
   const liveCoverUrl = useQuery(
     api.storage.getFileUrl,
@@ -213,7 +206,7 @@ export function BlogForm({
 
   const set = useCallback(<K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
-  }, []);
+  }, [setForm]);
 
   const [confirmOpen, setConfirmOpen] = useState(false);
 

@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState, type ReactElement } from "react";
+import { useState, type ReactElement } from "react";
+import { useHydrated } from "@/hooks/useHydrated";
 
 const STORAGE_KEY = "aztran_consent_given";
 
@@ -9,13 +10,11 @@ const STORAGE_KEY = "aztran_consent_given";
  * GDPR-oriented consent bar that coordinates with GTM Consent Mode v2 via `dataLayer`.
  */
 export function CookieConsentBanner(): ReactElement | null {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    setVisible(stored === null);
-  }, []);
+  const hydrated = useHydrated();
+  const [dismissed, setDismissed] = useState(false);
+  const hasStoredConsent =
+    hydrated && window.localStorage.getItem(STORAGE_KEY) !== null;
+  const visible = hydrated && !dismissed && !hasStoredConsent;
 
   const accept = (): void => {
     window.localStorage.setItem(STORAGE_KEY, "accepted");
@@ -28,12 +27,12 @@ export function CookieConsentBanner(): ReactElement | null {
       ad_user_data: "granted",
       ad_personalization: "granted",
     });
-    setVisible(false);
+    setDismissed(true);
   };
 
   const decline = (): void => {
     window.localStorage.setItem(STORAGE_KEY, "declined");
-    setVisible(false);
+    setDismissed(true);
   };
 
   return (

@@ -60,7 +60,7 @@ function emptyForm(): FormState {
   };
 }
 
-function fromDoc(d: Doc<"interviews">): FormState {
+function fromDoc(d: Doc<"marketRecaps">): FormState {
   return {
     title: d.title,
     slug: d.slug,
@@ -74,26 +74,28 @@ function fromDoc(d: Doc<"interviews">): FormState {
   };
 }
 
-export function InterviewForm({
-  interviewId,
+export function MarketRecapForm({
+  marketRecapId,
 }: {
-  interviewId?: Id<"interviews">;
+  marketRecapId?: Id<"marketRecaps">;
 }): ReactElement {
   const router = useRouter();
   const staffReady = useConvexStaffSessionReady();
   const existing = useQuery(
-    api.interviews.getInterviewById,
-    staffReady && interviewId ? { id: interviewId } : "skip",
+    api.marketRecaps.getMarketRecapById,
+    staffReady && marketRecapId ? { id: marketRecapId } : "skip",
   );
   const verifyHuman = useRecaptchaGate();
-  const createInterview = useMutation(api.interviews.createInterview);
-  const updateInterview = useMutation(api.interviews.updateInterview);
-  const publishInterview = useMutation(api.interviews.publishInterview);
-  const unpublishInterview = useMutation(api.interviews.unpublishInterview);
-  const deleteInterview = useMutation(api.interviews.deleteInterview);
+  const createMarketRecap = useMutation(api.marketRecaps.createMarketRecap);
+  const updateMarketRecap = useMutation(api.marketRecaps.updateMarketRecap);
+  const publishMarketRecap = useMutation(api.marketRecaps.publishMarketRecap);
+  const unpublishMarketRecap = useMutation(
+    api.marketRecaps.unpublishMarketRecap,
+  );
+  const deleteMarketRecap = useMutation(api.marketRecaps.deleteMarketRecap);
 
   const [form, setForm, hydrated] = useHydratedFormState(
-    interviewId,
+    marketRecapId,
     existing,
     emptyForm,
     fromDoc,
@@ -119,7 +121,7 @@ export function InterviewForm({
     [form.youtubeUrl],
   );
 
-  if (interviewId && !hydrated) {
+  if (marketRecapId && !hydrated) {
     return <div className="p-8 text-sm text-zinc-400">Loading…</div>;
   }
 
@@ -151,14 +153,14 @@ export function InterviewForm({
       toast.error("Enter a valid YouTube URL or video ID.");
       return;
     }
-    if (!(await guard("admin_interview_draft"))) return;
+    if (!(await guard("admin_market_recap_draft"))) return;
     const args = buildArgs("draft");
-    if (interviewId) {
-      await updateInterview({ id: interviewId, patch: { ...args } });
+    if (marketRecapId) {
+      await updateMarketRecap({ id: marketRecapId, patch: { ...args } });
     } else {
-      await createInterview(args);
+      await createMarketRecap(args);
     }
-    router.push("/admin/interviews");
+    router.push("/admin/market-recaps");
   };
 
   const publish = async (): Promise<void> => {
@@ -166,33 +168,33 @@ export function InterviewForm({
       toast.error("Enter a valid YouTube URL or video ID.");
       return;
     }
-    if (!(await guard("admin_interview_publish"))) return;
-    if (interviewId) {
-      await updateInterview({
-        id: interviewId,
+    if (!(await guard("admin_market_recap_publish"))) return;
+    if (marketRecapId) {
+      await updateMarketRecap({
+        id: marketRecapId,
         patch: { ...buildArgs("draft") },
       });
-      await publishInterview({ id: interviewId });
+      await publishMarketRecap({ id: marketRecapId });
     } else {
-      const id = await createInterview(buildArgs("draft"));
-      await publishInterview({ id });
+      const id = await createMarketRecap(buildArgs("draft"));
+      await publishMarketRecap({ id });
     }
-    router.push("/admin/interviews");
+    router.push("/admin/market-recaps");
   };
 
   const unpublish = async (): Promise<void> => {
-    if (!interviewId) return;
-    if (!(await guard("admin_interview_unpublish"))) return;
-    await unpublishInterview({ id: interviewId });
+    if (!marketRecapId) return;
+    if (!(await guard("admin_market_recap_unpublish"))) return;
+    await unpublishMarketRecap({ id: marketRecapId });
     router.refresh();
   };
 
   const remove = async (): Promise<void> => {
-    if (!interviewId) return;
-    if (!(await guard("admin_interview_delete"))) return;
-    await deleteInterview({ id: interviewId });
+    if (!marketRecapId) return;
+    if (!(await guard("admin_market_recap_delete"))) return;
+    await deleteMarketRecap({ id: marketRecapId });
     setConfirmOpen(false);
-    router.push("/admin/interviews");
+    router.push("/admin/market-recaps");
   };
 
   const published = existing?.status === "published";
@@ -211,12 +213,12 @@ export function InterviewForm({
         <Button type="button" onClick={() => void publish()}>
           Publish
         </Button>
-        {interviewId && published ? (
+        {marketRecapId && published ? (
           <Button type="button" variant="secondary" onClick={() => void unpublish()}>
             Unpublish
           </Button>
         ) : null}
-        {interviewId ? (
+        {marketRecapId ? (
           <Button
             type="button"
             variant="destructive"
@@ -230,11 +232,11 @@ export function InterviewForm({
       <div className="rounded-lg border border-cyan-500/25 bg-cyan-500/5 px-4 py-3 font-body text-[13px] leading-relaxed text-white/80">
         <p className="font-medium text-cyan-200/95">Public site</p>
         <p className="mt-1.5">
-          Published interviews appear at{" "}
+          Published market recaps appear at{" "}
           <code className="rounded bg-black/30 px-1 py-0.5 text-[12px]">
-            /insights/interviews
+            /insights/market-recaps
           </code>{" "}
-          and on the Interviews tab of the main insights hub.
+          and on the Market Recaps tab of the main insights hub.
         </p>
       </div>
 
@@ -332,13 +334,13 @@ export function InterviewForm({
       </Collapsible>
 
       <div>
-        <Label htmlFor="summary">About this interview</Label>
+        <Label htmlFor="summary">About this market recap</Label>
         <Textarea
           id="summary"
           value={form.summary}
           onChange={(e) => set("summary", e.target.value)}
           className="mt-2 min-h-[120px]"
-          placeholder="What was discussed, where it took place, and why it matters."
+          placeholder="What moved markets, over what period, and why it matters."
         />
       </div>
 
@@ -391,10 +393,10 @@ export function InterviewForm({
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete interview?</DialogTitle>
+            <DialogTitle>Delete market recap?</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
-            This permanently removes the interview and its thumbnail.
+            This permanently removes the market recap and its thumbnail.
           </p>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setConfirmOpen(false)}>

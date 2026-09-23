@@ -72,9 +72,10 @@ export function HeroSection(): ReactElement {
                 alt={slide.alt}
                 fill
                 priority={i === 0}
+                loading={i === 0 ? undefined : "eager"}
                 sizes="100vw"
                 unoptimized={isRemoteHeroImage(slide.src)}
-                className="object-contain object-center brightness-[0.98] contrast-[1.04] saturate-[1.06] dark:brightness-[0.92] dark:contrast-[1.05] dark:saturate-[1.05]"
+                className="object-cover object-center brightness-[0.98] contrast-[1.04] saturate-[1.06] dark:brightness-[0.92] dark:contrast-[1.05] dark:saturate-[1.05]"
               />
             </div>
           </div>

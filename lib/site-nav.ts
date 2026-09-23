@@ -6,6 +6,7 @@ export const INSIGHT_CATEGORIES = {
   marketReport: "Market Report",
   marketBuzz: "Market Buzz",
   interviews: "Interviews",
+  marketRecaps: "Market Recaps",
 } as const;
 
 /**
@@ -151,5 +152,11 @@ export const INSIGHTS_NAV: readonly InsightNavItem[] = [
     description:
       "Managing directors in conversation at conferences, panels, and industry forums.",
     category: INSIGHT_CATEGORIES.interviews,
+  },
+  {
+    href: "/insights/market-recaps",
+    label: "Market Recaps",
+    description: "Video wraps on rates, FX, equities, and flow from the desk.",
+    category: INSIGHT_CATEGORIES.marketRecaps,
   },
 ] as const;

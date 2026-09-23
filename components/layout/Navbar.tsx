@@ -13,6 +13,7 @@ import {
   type ReactElement,
 } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
+import { useHydrated } from "@/hooks/useHydrated";
 import { useNavbarScroll } from "@/hooks/useNavbarScroll";
 import { useUiStore } from "@/store/uiStore";
 import { cn } from "@/lib/utils";
@@ -102,7 +103,7 @@ export function Navbar(): ReactElement {
   const isScrolled = useUiStore((s) => s.isScrolled);
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHydrated();
   const { resolvedTheme } = useTheme();
   const isHome = pathname === "/";
   const isAboutOrServices =
@@ -157,10 +158,6 @@ export function Navbar(): ReactElement {
     !isDarkMode;
 
   const logoSrc = isDarkMode ? SITE_LOGO_PATH_ON_DARK : SITE_LOGO_PATH;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");

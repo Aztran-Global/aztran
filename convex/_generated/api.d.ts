@@ -20,6 +20,7 @@ import type * as emails_StaffInviteEmail from "../emails/StaffInviteEmail.js";
 import type * as insightCategories from "../insightCategories.js";
 import type * as insights from "../insights.js";
 import type * as interviews from "../interviews.js";
+import type * as marketRecaps from "../marketRecaps.js";
 import type * as marketReports from "../marketReports.js";
 import type * as portfolio from "../portfolio.js";
 import type * as recaptchaActions from "../recaptchaActions.js";
@@ -64,6 +65,7 @@ declare const fullApi: ApiFromModules<{
   insightCategories: typeof insightCategories;
   insights: typeof insights;
   interviews: typeof interviews;
+  marketRecaps: typeof marketRecaps;
   marketReports: typeof marketReports;
   portfolio: typeof portfolio;
   recaptchaActions: typeof recaptchaActions;

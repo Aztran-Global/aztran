@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "convex/react";
 import slugify from "slugify";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useCallback, useEffect, useState, type ReactElement } from "react";
+import { useCallback, type ReactElement } from "react";
 import { toast } from "sonner";
 import type { Doc, Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
@@ -24,6 +24,7 @@ import { ImageUploader } from "@/components/admin/ImageUploader";
 import type { GenericId } from "convex/values";
 import type { PortfolioStatus } from "@/types";
 import { useConvexStaffSessionReady } from "@/hooks/useConvexStaffSessionReady";
+import { useHydratedFormState } from "@/hooks/useHydratedFormState";
 import { useRecaptchaGate } from "@/hooks/useRecaptchaGate";
 
 type StorageId = GenericId<"_storage">;
@@ -116,20 +117,12 @@ export function PortfolioForm({
   const create = useMutation(api.portfolio.createPortfolioItem);
   const update = useMutation(api.portfolio.updatePortfolioItem);
 
-  const [form, setForm] = useState<FormState>(empty());
-  const [ready, setReady] = useState(!itemId);
-
-  useEffect(() => {
-    if (!itemId) {
-      setForm(empty());
-      setReady(true);
-      return;
-    }
-    if (existing) {
-      setForm(fromDoc(existing));
-      setReady(true);
-    }
-  }, [itemId, existing]);
+  const [form, setForm, ready] = useHydratedFormState(
+    itemId,
+    existing,
+    empty,
+    fromDoc,
+  );
 
   const previewUrl = useQuery(
     api.storage.getFileUrl,
@@ -139,7 +132,7 @@ export function PortfolioForm({
 
   const set = useCallback(<K extends keyof FormState>(k: K, v: FormState[K]) => {
     setForm((f) => ({ ...f, [k]: v }));
-  }, []);
+  }, [setForm]);
 
   if (!ready) {
     return (
